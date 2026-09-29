@@ -3909,6 +3909,12 @@
             "value" : "%@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5402,6 +5408,12 @@
             "value" : "%1$@ kan koble seg på Omnipod 5-poder."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ kan verbinding maken met Omnipod 5 Pods."
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5597,6 +5609,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ må laste ned og lagre sertifikatet fra internett for å koble til Omnipod 5-poder."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ moet een certificaat van internet downloaden en opslaan om verbinding te kunnen maken met Omnipod 5 Pods."
           }
         },
         "ro" : {
@@ -6261,7 +6279,16 @@
         }
       }
     },
-    "⚠️Warning - Unable to silence Pod alerts with the firmware in this particular Pod!" : {},
+    "⚠️Warning - Unable to silence Pod alerts with the firmware in this particular Pod!" : {
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚠️Waarschuwing - Met de firmware in deze Pod kunnen de Pod-alarmen niet gedempt worden!"
+          }
+        }
+      }
+    },
     "1 hour" : {
       "comment" : "Button text for 1 hour suspend duration",
       "extractionState" : "manual",
@@ -6929,6 +6956,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Det vil bli brukt et nytt sertifikat ved neste paring av en Omnipod 5-pod"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bij het koppelen van de volgende Omnipod 5 Pod wordt een nieuw certificaat gebruikt."
           }
         },
         "ro" : {
@@ -8404,7 +8437,15 @@
       }
     },
     "All confirmation reminder beeps are suppressed, but other audible Pod alert beeping cannot be silenced for this Pod." : {
-      "comment" : "Alternate black dot description for SilencePodPreference.disabled"
+      "comment" : "Alternate black dot description for SilencePodPreference.disabled",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle bevestigingspiepjes worden onderdrukt, maar andere hoorbare Pod-alarmen kunnen bij deze Pod niet gedempt worden."
+          }
+        }
+      }
     },
     "All Pod alerts use no beeps and confirmation reminder beeps are suppressed. The Pod will only beep for fatal Pod faults and when playing test beeps.\n\n⚠️Warning - If your phone is out of range of the pod while this feature is enabled, you will not receive any in-app notifications; and the pod will not beep to alert you." : {
       "comment" : "Description for SilencePodPreference.enabled",
@@ -9229,6 +9270,12 @@
             "value" : "Attestering med Apple..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifiëren bij Apple…"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9568,7 +9615,15 @@
       }
     },
     "Background wake-ups from the pod are less frequent on this pod and phone combination." : {
-      "comment" : "Subtitle of BLE heartbeat degraded notice row"
+      "comment" : "Subtitle of BLE heartbeat degraded notice row",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bij deze combinatie van Pod en telefoon wekt de Pod de app op de achtergrond minder vaak."
+          }
+        }
+      }
     },
     "Basal initialized" : {
       "comment" : "Pod state when basal initialized",
@@ -9907,7 +9962,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "blauw"
+            "value" : "blauwe"
           }
         }
       }
@@ -13335,6 +13390,12 @@
             "value" : "Sjekk av enhetsstøtte..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apparaatondersteuning controleren…"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13532,6 +13593,12 @@
             "value" : "Sjekk av nettilkobling..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Internetverbinding controleren…"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13565,6 +13632,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sjekk av serverstatus…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serverstatus controleren…"
           }
         },
         "ro" : {
@@ -14746,6 +14819,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kompilert"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingebouwd"
           }
         },
         "ro" : {
@@ -16221,7 +16300,15 @@
       }
     },
     "Connecting to the pod may sometimes take noticeably longer than usual — occasionally up to 30 seconds — while stalled attempts are detected and retried automatically. Commands still complete once the connection is made." : {
-      "comment" : "InPlay connection info: what to expect body 1"
+      "comment" : "InPlay connection info: what to expect body 1",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbinding maken met de Pod kan soms merkbaar langer duren dan normaal — af en toe tot 30 seconden — omdat vastgelopen pogingen worden herkend en automatisch opnieuw worden geprobeerd. Opdrachten worden gewoon uitgevoerd zodra de verbinding er is."
+          }
+        }
+      }
     },
     "Continue" : {
       "comment" : "Action button description when deactivated\nAction button title for attach pod view\nButton title to continue\nCannula insertion button text when inserted\nPod pairing action button text when paired\nText for continue button\nText for continue button on PodSetupView\nTitle of button to continue discard",
@@ -16404,6 +16491,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kunne ikke finne serveren til nøkkelhåndtering."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De sleutelbeheerserver kon niet worden gevonden."
           }
         },
         "ro" : {
@@ -18709,6 +18802,12 @@
             "value" : "Slett lagret sertifikat"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opgeslagen certificaat verwijderen"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18744,6 +18843,12 @@
             "value" : "Slett lagret sertifikat %1$@"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opgeslagen certificaat %1$@ verwijderen"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18777,6 +18882,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Det er ikke nødvendig å slette sertifikatet for å bytte til en annen pod eller pumpetype. Er du sikker at du vil fortsette?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het certificaat verwijderen is niet nodig om naar een ander Pod- of pomptype over te stappen. Weet je zeker dat je wilt doorgaan?"
           }
         },
         "ro" : {
@@ -19948,6 +20059,12 @@
             "value" : "Nedlastet"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gedownload"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19981,6 +20098,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nedlasting av sertifikatet..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Certificaat downloaden…"
           }
         },
         "ro" : {
@@ -20826,6 +20949,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Skriv inn oppsettstoken for Omnipod 5 testing"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voer de installatietoken in voor het testen van Omnipod 5"
           }
         },
         "ro" : {
@@ -26857,6 +26986,12 @@
             "value" : "Genererer app signerings nøkkel..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Attest-sleutel aanmaken…"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -27540,6 +27675,12 @@
             "value" : "Import mislyktes"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importeren mislukt"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -27573,6 +27714,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Importert"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geïmporteerd"
           }
         },
         "ro" : {
@@ -31640,7 +31787,15 @@
       }
     },
     "Issues status requests to minimize Bluetooth disconnects. The default When Open selection should be sufficient for all iPhone and Pod combinations." : {
-      "comment" : "Summary of the Pod Keep Alive concept"
+      "comment" : "Summary of the Pod Keep Alive concept",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verstuurt statusverzoeken om het verbreken van de Bluetooth-verbinding zo veel mogelijk te voorkomen. De standaardkeuze 'Wanneer geopend' zou voor alle combinaties van iPhone en Pod moeten volstaan."
+          }
+        }
+      }
     },
     "Keep the RileyLink about 6 inches from the pod during pairing." : {
       "comment" : "Label text for step 2 of Eros pair pod instructions",
@@ -31805,7 +31960,15 @@
       }
     },
     "Keeping your phone near the pod helps connections complete faster. Not every pod uses this radio — a future pod may connect normally." : {
-      "comment" : "InPlay connection info: guidance body 2"
+      "comment" : "InPlay connection info: guidance body 2",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als je telefoon dicht bij de Pod blijft, komt de verbinding sneller tot stand. Niet elke Pod gebruikt deze radio — een volgende Pod kan dus gewoon normaal verbinden."
+          }
+        }
+      }
     },
     "Last connection: %@" : {
       "comment" : "A message indicating that the last connection to a device occurred at a specific time, and that the device is not responding.",
@@ -32312,6 +32475,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Last inn bruker seritifikat."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigen certificaat laden"
           }
         },
         "ro" : {
@@ -36379,7 +36548,15 @@
       }
     },
     "No action is needed — this is not a pod fault, and insulin delivery is not affected. The pod continues its programmed delivery even while disconnected." : {
-      "comment" : "InPlay connection info: guidance body 1"
+      "comment" : "InPlay connection info: guidance body 1",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je hoeft niets te doen — dit is geen Pod-storing en de insulinetoediening wordt er niet door beïnvloed. De Pod gaat door met de geprogrammeerde toediening, ook als de verbinding even weg is."
+          }
+        }
+      }
     },
     "No Alert" : {
       "comment" : "No Alert low reservoir value",
@@ -40936,6 +41113,12 @@
             "value" : "Omnipod 5 Pods har en gjennomsiktig kanylebeskyttelse med et LOT-nummer på 12 tegn som vanligvis begynner med \"PH1\" eller \"PR1\". Pod-teknologien \"SmartAdjust\" vil ikke bli brukt til closed loop."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omnipod 5 Pods hebben een doorzichtig naaldlipje met een LOT-nummer van 12 tekens dat meestal begint met 'PH1' of 'PR1'. De \"SmartAdjust\"-technologie van de Pod wordt niet gebruikt voor de closed loop-regeling."
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -41133,6 +41316,12 @@
             "value" : "Omnipod 5 oppsett"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omnipod 5 instellen"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -41166,6 +41355,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Omnipod 5 støtte"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omnipod 5-ondersteuning"
           }
         },
         "ro" : {
@@ -41759,7 +41954,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Omnipod DASH Pods hebben een blauw naaldtabblad met een PARTIJNUMMER van 12 tekens dat meestal begint met 'PD1'."
+            "value" : "Omnipod DASH Pods hebben een blauw naaldlipje met een PARTIJNUMMER van 12 tekens dat meestal begint met 'PD1'."
           }
         },
         "pl" : {
@@ -42803,7 +42998,15 @@
       }
     },
     "Pairing a new pod may also need extra time or an additional attempt." : {
-      "comment" : "InPlay connection info: what to expect body 2"
+      "comment" : "InPlay connection info: what to expect body 2",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ook het koppelen van een nieuwe Pod kan extra tijd of een extra poging nodig hebben."
+          }
+        }
+      }
     },
     "Pairing completed" : {
       "comment" : "Pod status when pairing completed",
@@ -44444,6 +44647,12 @@
             "value" : "Sjekk om du har mobilnett, og prøv på nytt."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleer je internetverbinding en probeer het opnieuw."
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -44639,6 +44848,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Koble deg opp til Wi-Fi eller mobilnett, og prøv på nytt."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maak verbinding met wifi of mobiele data en probeer het opnieuw."
           }
         },
         "ro" : {
@@ -46803,7 +47018,15 @@
       }
     },
     "Pod Connections" : {
-      "comment" : "Navigation bar title for InPlay connection info view"
+      "comment" : "Navigation bar title for InPlay connection info view",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pod-verbindingen"
+          }
+        }
+      }
     },
     "Pod deactivated successfully. Continue." : {
       "comment" : "Deactivate pod action button accessibility label when deactivation complete",
@@ -50067,6 +50290,12 @@
             "value" : "Pod keep alive er deaktivert. Det sendes ikke ut ytterligere forespørsler om pod-status for å forhindre at pod-forbindelser brytes (normalt oppførsel)."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pod keep alive uitgeschakeld. Er worden geen extra Pod-statusverzoeken verstuurd om het verbreken van de verbinding te voorkomen (normaal gedrag)."
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -50426,6 +50655,12 @@
             "value" : "Pod keep alive er aktivert når appen er i forgrunnen og telefonen er ulåst. Systemet forsøker å opprettholde pod-tilkoblingen ved å sende en ny forespørsel om pod-status etter 2 minutter og 40 sekunder."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pod keep alive ingeschakeld wanneer de app op de voorgrond staat en de telefoon ontgrendeld is. Probeert de Pod verbonden te houden door na 2 minuten en 40 seconden een extra Pod-statusverzoek te versturen."
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -50623,6 +50858,12 @@
             "value" : "Pod keep alive er aktivert. Det sendes en ny forespørsel om pod-status etter 2 minutter.\n\nKrever en Rileylink-kompatibel enhet innenfor bluetooth-rekkevide. Tillater at poden sender keep alive meldinger når appen kjører i bakgrunnen. Denne metoden bruker mindre batteri på iPhone og litt mer batteri på Dash enn Silent tune metoden. En Rileylink-kompatibel enhet må være aktivert i pumpevisningen."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pod keep alive ingeschakeld. Na 2 minuten wordt een extra Pod-statusverzoek verstuurd.\n\nVereist een RileyLink-compatibel apparaat binnen Bluetooth-bereik. Maakt Pod keep alive-berichten mogelijk wanneer de app op de achtergrond draait. Deze methode gebruikt minder iPhone-batterij en iets meer DASH-batterij dan de methode 'Stille melodie'. Een RileyLink-compatibel apparaat moet ingeschakeld zijn in het pompscherm."
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -50818,6 +51059,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pod-keep alive er aktivert. Systemet forsøker å opprettholde forbindelsen til poden ved å sende en ny statusforespørsel etter 2 minutter og 40 sekunder, selv når telefonen er låst, ved å spille av en lydløs melodi. Den lydløse melodien kan bli avbrutt av andre apper. Hvis den lydløse melodien blir avbrutt, slutter pod-keep alive å fungere. Den lydløse melodien bruker ekstra batteri på iPhone."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pod keep alive ingeschakeld. Probeert de Pod verbonden te houden door na 2 minuten en 40 seconden een extra Pod-statusverzoek te versturen, ook als de telefoon vergrendeld is, door een stille melodie af te spelen. De stille melodie kan door andere apps worden onderbroken. Als dat gebeurt, werkt Pod keep alive niet meer. De stille melodie kost extra iPhone-batterij."
           }
         },
         "ro" : {
@@ -53123,6 +53370,12 @@
             "value" : "Trykk på «Fortsett» for å laste ned et sertifikat nå og aktivere støtte for Omnipod 5 ved neste pod-bytte."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik op 'Vervolg' om nu een certificaat te downloaden en ondersteuning voor Omnipod 5 in te schakelen bij je volgende Pod-wissel."
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -54110,7 +54363,15 @@
       }
     },
     "Pump Heartbeat" : {
-      "comment" : "Section header on InPlay connection info view"
+      "comment" : "Section header on InPlay connection info view",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pomp-heartbeat"
+          }
+        }
+      }
     },
     "Pump Manager Details" : {
       "comment" : "Text for pump manager details navigation link\nnavigation title for pump manager details",
@@ -56584,7 +56845,15 @@
       }
     },
     "Reduced Background Wake-Ups" : {
-      "comment" : "Title of BLE heartbeat degraded notice row"
+      "comment" : "Title of BLE heartbeat degraded notice row",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minder vaak gewekt op de achtergrond"
+          }
+        }
+      }
     },
     "Ref: " : {
       "comment" : "PDM Ref string line",
@@ -57579,6 +57848,12 @@
             "value" : "Forespørsel om serverutfordring..."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Servercontrole aanvragen…"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -57612,6 +57887,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Løser app-identitet…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App-identiteit bepalen…"
           }
         },
         "ro" : {
@@ -58619,6 +58900,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hent et Omnipod 5 Pod-sertifikat for å fortsette."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haal een Omnipod 5 Pod-certificaat op om verder te gaan."
           }
         },
         "ro" : {
@@ -61248,6 +61535,12 @@
             "value" : "Konfigurasjon avbrutt."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatie geannuleerd."
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -61445,6 +61738,12 @@
             "value" : "Konfigurasjonstoken"
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatietoken"
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -61478,6 +61777,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Konfigurasjonstoken"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installatietoken"
           }
         },
         "ro" : {
@@ -62467,7 +62772,15 @@
       }
     },
     "Silence Pod mode can only suppress confirmation reminder beeping with this Pod." : {
-      "comment" : "Help text for Silence Pod view for black dot pods"
+      "comment" : "Help text for Silence Pod view for black dot pods",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stille Podmodus kan bij deze Pod alleen de bevestigingspiepjes onderdrukken."
+          }
+        }
+      }
     },
     "Silence Pod mode suppresses all Pod alert and confirmation reminder beeping." : {
       "comment" : "Help text for Silence Pod view",
@@ -63926,7 +64239,15 @@
       }
     },
     "Slower Connections Expected" : {
-      "comment" : "Title of InPlay connection notice row\nTitle on InPlay connection info view"
+      "comment" : "Title of InPlay connection notice row\nTitle on InPlay connection info view",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tragere verbindingen verwacht"
+          }
+        }
+      }
     },
     "Starting…" : {
       "comment" : "O5 key fetch initial loading text",
@@ -63947,6 +64268,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Starter…..."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starten…"
           }
         },
         "ro" : {
@@ -63994,6 +64321,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Steg %1$d av %2$d"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stap %1$d van %2$d"
           }
         },
         "ro" : {
@@ -66455,6 +66788,12 @@
             "value" : "Trykk 'Fortsett' for å laste ned et sertifikat som skal lagres for å kunne koble til Omnipod 5-podene. Dette er en engangshandling som krever internettilgang."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tik op 'Vervolg' om een certificaat te downloaden en op te slaan waarmee je Omnipod 5 Pods kunt koppelen. Dit hoeft maar één keer en vereist een internetverbinding."
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -67948,6 +68287,12 @@
             "value" : "Det ser ut til at internettforbindelsen er frakoblet."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er lijkt geen internetverbinding te zijn."
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -67983,6 +68328,12 @@
             "value" : "Serveren for nøkkelhåndtering er midlertidig utilgjengelig: det ble mottatt et uventet svar."
           }
         },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De sleutelbeheerserver is tijdelijk niet beschikbaar: er werd een onverwacht antwoord ontvangen."
+          }
+        },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
@@ -68016,6 +68367,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Serveren for nøkkelhåndtering er midlertidig utilgjengelig."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De sleutelbeheerserver is tijdelijk niet beschikbaar."
           }
         },
         "ro" : {
@@ -68722,7 +69079,15 @@
       }
     },
     "The usual method for the pod to wake the app on a timer can't be used on this combination. Instead, the app is woken when the pod's connection drops, and reconnects right away." : {
-      "comment" : "InPlay connection info: heartbeat body 1"
+      "comment" : "InPlay connection info: heartbeat body 1",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De gebruikelijke manier waarop de Pod de app op vaste tijden wekt, werkt niet bij deze combinatie. In plaats daarvan wordt de app gewekt wanneer de verbinding met de Pod wegvalt, waarna direct opnieuw verbinding wordt gemaakt."
+          }
+        }
+      }
     },
     "The window on the top of the Pod should be colored pink when the cannula is properly inserted into the skin." : {
       "comment" : "Description of proper cannula insertion",
@@ -69373,7 +69738,15 @@
       }
     },
     "These wake-ups are less regular than usual — roughly every few minutes. If your CGM delivers readings to the app, it provides the wake-ups instead and looping continues normally." : {
-      "comment" : "InPlay connection info: heartbeat body 2"
+      "comment" : "InPlay connection info: heartbeat body 2",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze wekmomenten zijn minder regelmatig dan normaal — ongeveer om de paar minuten. Als je CGM metingen aan de app levert, zorgt die voor het wekken en blijft de loop gewoon werken."
+          }
+        }
+      }
     },
     "This certificate will be permanently deleted." : {
       "comment" : "Confirmation message when forgetting a saved O5 certificate",
@@ -69417,7 +69790,15 @@
       }
     },
     "This pod and phone combination can be slow to connect." : {
-      "comment" : "Subtitle of InPlay connection notice row"
+      "comment" : "Subtitle of InPlay connection notice row",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bij deze combinatie van Pod en telefoon kan het verbinden traag gaan."
+          }
+        }
+      }
     },
     "This PumpManager has not been configured with a maximum basal rate because it was added before manual temp basal was a feature. Please set a new maximum basal rate." : {
       "comment" : "Alert format string for missing temp basal configuration.",
@@ -75250,10 +75631,26 @@
       }
     },
     "What to Expect" : {
-      "comment" : "Section header on InPlay connection info view"
+      "comment" : "Section header on InPlay connection info view",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wat je kunt verwachten"
+          }
+        }
+      }
     },
     "What You Can Do" : {
-      "comment" : "Section header on InPlay connection info view"
+      "comment" : "Section header on InPlay connection info view",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wat je kunt doen"
+          }
+        }
+      }
     },
     "When enabled and pod is within range, additional pod status requests are issued to minimize pod Bluetooth disconnects." : {
       "comment" : "Summary of the Pod Keep Alive concept",
@@ -75437,6 +75834,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Når aktiviert, sendes det flere forespørsler om pod-status for å minimere antall avbrud på grunn av tapt Bluetooth tilkoblinger."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wanneer ingeschakeld, worden extra Pod-statusverzoeken verstuurd om het verbreken van de Bluetooth-verbinding met de Pod zo veel mogelijk te voorkomen."
           }
         },
         "ro" : {
@@ -77966,7 +78369,15 @@
       }
     },
     "Your pod uses an “InPlay” Bluetooth radio, and your phone (%1$@) is a model known to trigger a bug in that radio’s firmware. When it happens, the Bluetooth connection silently stalls while being established." : {
-      "comment" : "InPlay connection info: what is happening (1: iPhone model name)"
+      "comment" : "InPlay connection info: what is happening (1: iPhone model name)",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je Pod gebruikt een “InPlay”-Bluetooth-radio, en je telefoon (%1$@) is een model waarvan bekend is dat het een fout in de firmware van die radio uitlokt. Als dat gebeurt, loopt de Bluetooth-verbinding ongemerkt vast terwijl die wordt opgezet."
+          }
+        }
+      }
     }
   },
   "version" : "1.1"
