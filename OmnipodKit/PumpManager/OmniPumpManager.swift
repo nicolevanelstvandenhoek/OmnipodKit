@@ -269,12 +269,21 @@ public class OmniPumpManager: RileyLinkPumpManager {
             }
 
             if oldValue.podState?.setupProgress != newValue.podState?.setupProgress, newValue.podState?.setupProgress == .completed {
+                let podType = newValue.podType
                 self.pumpDelegate.notify() { (delegate) in
                     let date = Date()
-                    let event = NewPumpEvent(date: date, dose: nil, raw: "Pod Change \(date)".data(using: .utf8)!, title: "Pod Change", type: .replaceComponent(componentType: .pump))
+                    let title = String(format: LocalizedString("Pod Change (%@)", comment: "Pump event title for a newly paired pod (1: pod type)"), podType.description)
+                    let event = NewPumpEvent(date: date, dose: nil, raw: "Pod Change \(date)".data(using: .utf8)!, title: title, type: .replaceComponent(componentType: .pump))
                     delegate?.pumpManager(self, hasNewPumpEvents: [event], lastReconciliation: self.lastSync, replacePendingEvents: false) { _ in }
+                    delegate?.deviceManager(self, recordAnalyticsEvent: "Pod Paired", properties: ["podType": podType.briefName])
                 }
             }
+        }
+
+        // Once the delegate has been asked to remove this pump manager, a late state write (e.g. from
+        // an async RileyLink disconnect) must not reach it, or the host may re-adopt this manager.
+        guard !lockedIsDeactivating.value else {
+            return returnType
         }
 
         // Ideally we ensure that oldValue.rawValue != newValue.rawValue, but the types aren't
@@ -291,6 +300,8 @@ public class OmniPumpManager: RileyLinkPumpManager {
     }
 
     private let lockedState: Locked<OmniPumpManagerState>
+
+    private let lockedIsDeactivating = Locked(false)
 
     private let statusObservers = WeakSynchronizedSet<PumpManagerStatusObserver>()
 
@@ -437,6 +448,7 @@ public class OmniPumpManager: RileyLinkPumpManager {
     private let silentTune = SilentTune()
 
     @objc func appMovedToBackground() {
+        podKeepAliveAppDidEnterBackground()
         /// If using Silent Tune pod keep alives and a pod, starting playing the silent tune.
         if state.podKeepAlive == .silentTune && state.podState != nil {
             silentTune.startPlayer()
@@ -444,6 +456,7 @@ public class OmniPumpManager: RileyLinkPumpManager {
     }
 
     @objc func appMovedToForeground() {
+        podKeepAliveAppWillEnterForeground()
         silentTune.stopPlayer()
     }
 
@@ -1067,12 +1080,7 @@ extension OmniPumpManager {
                 return
             }
 
-            if state.podType.isEros || state.podKeepAlive == .rileyLink {
-                /// Switching away from using RileyLinks, disconnect the devices
-                disconnectRileyLinkDevices()
-            }
-
-            forgetBluetoothManager()
+            forgetBluetoothConnections()
 
             let podComms: PodComms
             switch newValue {
@@ -1105,7 +1113,7 @@ extension OmniPumpManager {
         }
     }
 
-    // Currently running with an Omnipod 5 "black dot" pod
+    /// Running with a pod that does not have silent beep support (e.g., a "black dot" O5)
     var noSilentBeep: Bool {
         return state.podState?.noSilentBeep == true
     }
@@ -1186,6 +1194,10 @@ extension OmniPumpManager {
 
         self.podComms.handleDiscardedPodDosing(podTime: podTime, reservoirLevel: reservoirLevel?.rawValue)
 
+        if let podState = state.podState {
+            reportPodEnded(podState)
+        }
+
         self.podComms.forgetPod()
 
         self.resetPerPodPumpManagerState()
@@ -1206,9 +1218,58 @@ extension OmniPumpManager {
         }
     }
 
-    // If applicable forget the BluetoothManager for current podComms
-    // to avoid future "Bluetooth use unsupported on this device" errors.
-    func forgetBluetoothManager() {
+    /// Reports the end of a pod's life as a pump event and an analytics event.
+    private func reportPodEnded(_ podState: PodState) {
+        let lifetime: TimeInterval
+        if let faultTime = podState.fault?.faultEventTimeSinceActivation {
+            /// Since the pod has a valid faultEventTimeSinceActivation, use this rather than the pod's time.
+            /// Reset type pod faults return atypical fault time values that will not be considered valid on decode.
+            lifetime = faultTime
+        } else {
+            /// Otherwise use the always increasing podTime to compute the pod’s
+            /// lifetime for reset pod faults, deactivated pods, or discarded pods.
+            let elapsed = -(podState.podTimeUpdated?.timeIntervalSinceNow ?? 0)
+            lifetime = podState.podTime + elapsed
+        }
+        var properties: [AnyHashable: Any] = [
+            "podType": podState.podType.briefName,
+            "lifetimeHours": (lifetime.hours * 10).rounded() / 10,
+        ]
+        if let fault = podState.fault {
+            properties["reason"] = "fault"
+            properties["faultCode"] = String(format: "0x%02X", fault.faultEventCode.rawValue)
+        } else if podState.deliveryStoppedAt != nil {
+            properties["reason"] = "deactivated"
+        } else {
+            properties["reason"] = "discarded"
+        }
+
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour]
+        formatter.unitsStyle = .abbreviated
+        let title = String(format: LocalizedString("Pod Removed after %@", comment: "Pump event title when a pod ends (1: pod lifetime)"), formatter.string(from: lifetime) ?? "")
+
+        pumpDelegate.notify { (delegate) in
+            let date = Date()
+            let event = NewPumpEvent(date: date, dose: nil, raw: "Pod Removed \(date)".data(using: .utf8)!, title: title)
+            delegate?.pumpManager(self, hasNewPumpEvents: [event], lastReconciliation: self.lastSync, replacePendingEvents: false) { _ in }
+            delegate?.deviceManager(self, recordAnalyticsEvent: "Pod Ended", properties: properties)
+        }
+    }
+
+    // Stop using OmnipodKit altogether: release Bluetooth and any RileyLinks, then ask the delegate to remove us.
+    func stopUsing(completion: @escaping () -> Void) {
+        lockedIsDeactivating.value = true
+        forgetBluetoothConnections()
+        notifyDelegateOfDeactivation(completion: completion)
+    }
+
+    /// Forget all Bluetooth connections. For BLE pods call
+    /// blePodComms.forgetBluetoothManager() to avoid future
+    /// "Bluetooth use unsupported on this device" errors.
+    /// For Eros pods or if using Pod Keep Alive RileyLink mode,
+    /// call disconnectRileyLinkDevices() to release the RLs.
+    func forgetBluetoothConnections() {
         if let blePodComms = self.lockedPodComms.value as? BlePodComms {
             blePodComms.forgetBluetoothManager()
         }
@@ -2301,10 +2362,12 @@ extension OmniPumpManager {
     }
 
     // A host asked the pump to provide the BLE heartbeat on a combination needing the eager-connect
-    // mitigation. The usual StartDelay probe can't be used there, so wakes are driven by link drops
-    // instead (see BluetoothManager.isEagerHeartbeatMode) — workable, but less regular.
+    // mitigation, while a Pod Keep Alive mode holds the pod connected in the background. The usual
+    // StartDelay probe can't be used there, so wakes are driven by link drops instead
+    // (see BluetoothManager.isEagerHeartbeatMode) — workable, but less regular.
     var bleHeartbeatDegradedForThisPod: Bool {
-        guard usingInPlayPod == true, UIDevice.hasPossibleInPlayBLEIssues else { return false }
+        guard usingInPlayPod == true, UIDevice.hasPossibleInPlayBLEIssues,
+              state.podKeepAlive.keepsPodConnectedInBackground else { return false }
         if let blePodComms = podComms as? BlePodComms {
             return blePodComms.isBLEHeartbeatRequested
         }
@@ -3202,6 +3265,10 @@ extension OmniPumpManager: PumpManager {
                 self.runSession(withName: "Silence already acknowledged alert") { (result) in
                     switch result {
                     case .success(let session):
+                        // Another queued session may have cleared it already
+                        guard self.state.alertsWithPendingAcknowledgment.contains(alert) else {
+                            return
+                        }
                         do {
                             let _ = try session.acknowledgeAlerts(alerts: AlertSet(slots: [slot]))
                         } catch {
@@ -3404,30 +3471,38 @@ extension OmniPumpManager {
                         return
                     }
 
+                    // Loop records the acknowledgement as soon as it is tapped. Persist it here too, before
+                    // the session runs, so that if the app dies while waiting on the pod the next status
+                    // update still clears the pod alert (see silenceAcknowledgedAlerts).
+                    self.setState { state in
+                        state.alertsWithPendingAcknowledgment.insert(alert)
+                    }
+
                     // Acknowledge the pod alert for the triggering slot
                     self.runSession(withName: "Acknowledge Alert") { (result) in
                         switch result {
                         case .success(let session):
                             self.handleSilencePodEnd(session: session)
 
+                            // A retry from silenceAcknowledgedAlerts may have cleared it already
+                            guard self.state.alertsWithPendingAcknowledgment.contains(alert) else {
+                                completion(nil)
+                                return
+                            }
+
                             do {
                                 let beepBlock = self.beepMessageBlock(beepType: .beep)
                                 let _ = try session.acknowledgeAlerts(alerts: AlertSet(slots: [slot]), beepBlock: beepBlock)
                             } catch {
-                                self.setState { state in
-                                    state.alertsWithPendingAcknowledgment.insert(alert)
-                                }
                                 completion(error)
                                 return
                             }
                             self.setState { state in
                                 state.activeAlerts.remove(alert)
+                                state.alertsWithPendingAcknowledgment.remove(alert)
                             }
                             completion(nil)
                         case .failure(let error):
-                            self.setState { state in
-                                state.alertsWithPendingAcknowledgment.insert(alert)
-                            }
                             completion(error)
                         }
                     }
