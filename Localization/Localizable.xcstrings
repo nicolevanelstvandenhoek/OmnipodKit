@@ -9663,13 +9663,37 @@
       }
     },
     "Background keep alive enabled using a selected RileyLink-compatible device in the pump view that is in Bluetooth range. This method uses less iPhone battery than the Silent Tune method." : {
-      "comment" : "Description for PodKeepAlive.rileyLink"
+      "comment" : "Description for PodKeepAlive.rileyLink",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achtergrondverbinding actief via een gekozen RileyLink-compatibel apparaat in het pompscherm dat binnen Bluetooth-bereik is. Deze methode gebruikt minder iPhone-batterij dan de methode met de stille toon."
+          }
+        }
+      }
     },
     "Background keep alive enabled using a silent tune. If silent tune is interrupted by other apps, pod keep alive will stop working. The silent tune consumes extra iPhone battery." : {
-      "comment" : "Description for PodKeepAlive.silentTune"
+      "comment" : "Description for PodKeepAlive.silentTune",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achtergrondverbinding actief via een stille toon. Als andere apps de stille toon onderbreken, werkt het actief houden van de Pod niet meer. De stille toon gebruikt extra iPhone-batterij."
+          }
+        }
+      }
     },
     "Background keep alive is off (default)." : {
-      "comment" : "Description for PodKeepAlive.disabled"
+      "comment" : "Description for PodKeepAlive.disabled",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achtergrondverbinding staat uit (standaard)."
+          }
+        }
+      }
     },
     "Background wake-ups from the pod are less frequent on this pod and phone combination." : {
       "comment" : "Subtitle of BLE heartbeat degraded notice row",
@@ -16387,7 +16411,15 @@
       }
     },
     "Connecting to pod…" : {
-      "comment" : "Status shown while deactivation waits for a pod connection"
+      "comment" : "Status shown while deactivation waits for a pod connection",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbinden met de Pod…"
+          }
+        }
+      }
     },
     "Connecting to the pod may sometimes take noticeably longer than usual — occasionally up to 30 seconds — while stalled attempts are detected and retried automatically. Commands still complete once the connection is made." : {
       "comment" : "InPlay connection info: what to expect body 1",
@@ -47229,7 +47261,15 @@
       }
     },
     "Pod Change (%@)" : {
-      "comment" : "Pump event title for a newly paired pod (1: pod type)"
+      "comment" : "Pump event title for a newly paired pod (1: pod type)",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pod gewisseld (%@)"
+          }
+        }
+      }
     },
     "Pod Connections" : {
       "comment" : "Navigation bar title for InPlay connection info view",
@@ -51329,7 +51369,15 @@
       }
     },
     "Pod keep alive options to issue background status requests to minimize pod disconnects. Should no longer be needed for any iPhone and pod combination." : {
-      "comment" : "Summary of the Pod Keep Alive concept"
+      "comment" : "Summary of the Pod Keep Alive concept",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opties om de Pod actief te houden met statusverzoeken op de achtergrond, zodat de verbinding minder vaak wegvalt. Dit zou voor geen enkele combinatie van iPhone en Pod nog nodig moeten zijn."
+          }
+        }
+      }
     },
     "Pod not connected" : {
       "comment" : "Error message shown when the pod is not connected.",
@@ -51980,7 +52028,15 @@
       }
     },
     "Pod Removed after %@" : {
-      "comment" : "Pump event title when a pod ends (1: pod lifetime)"
+      "comment" : "Pump event title when a pod ends (1: pod lifetime)",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pod verwijderd na %@"
+          }
+        }
+      }
     },
     "Pod sent ack instead of response" : {
       "comment" : "Error message shown when pod sends ack instead of response",
@@ -68757,7 +68813,15 @@
       }
     },
     "The pod is not responding. Still trying…" : {
-      "comment" : "Status shown when a deactivation connection attempt is taking a while"
+      "comment" : "Status shown when a deactivation connection attempt is taking a while",
+      "localizations" : {
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De Pod reageert niet. Nog steeds bezig…"
+          }
+        }
+      }
     },
     "The reminders above will not sound on your device when it is in Silent or Do Not Disturb mode. There are other critical Pod alerts that will sound on your device even when set to Silent or Do Not Disturb mode.\n\nThe Pod will also use audible beeps for all Pod reminders and alerts except when the Pod is Silenced." : {
       "comment" : "Description text for critical alerts",
