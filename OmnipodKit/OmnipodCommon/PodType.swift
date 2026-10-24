@@ -116,6 +116,18 @@ struct PodType: CustomStringConvertible, Equatable {
         }
     }
 
+    // Basic pod disconnect interval with no activity
+    var disconnectInterval: TimeInterval {
+        switch podType {
+        case .productIdDash:
+            return .minutes(3)
+        case .productIdOmnipod5:
+            return .minutes(5)
+        default:
+            return 0 // Not applicable
+        }
+    }
+
     // The Eros PDM uses 0x1F for the top byte of the 32 bit Id address.
     // The Dash PDM uses the PDM's SN << 2 for the bottom 5 nibbles and some
     // unknown values for the top 3 nibbles of its fixed 32-bit controller Id.

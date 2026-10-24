@@ -6293,6 +6293,18 @@
             "value" : "⚠️Waarschuwing - Met de firmware in deze Pod kunnen de Pod-alarmen niet gedempt worden!"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚠️Atenție - Nu se pot dezactiva alertele pompei cu firmware-ul acestei pompe!"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚠️Varning – Det går inte att tysta varningarna med den här poddens firmware!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8463,6 +8475,12 @@
             "value" : "Alle bevestigingspiepjes worden onderdrukt, maar andere hoorbare Pod-alarmen kunnen bij deze Pod niet gedempt worden."
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toate semnalele sonore de confirmare sunt dezactivate, dar celelalte semnale sonore de alertă ale pompei nu pot fi dezactivate pentru această pompă."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9644,6 +9662,15 @@
         }
       }
     },
+    "Background keep alive enabled using a selected RileyLink-compatible device in the pump view that is in Bluetooth range. This method uses less iPhone battery than the Silent Tune method." : {
+      "comment" : "Description for PodKeepAlive.rileyLink"
+    },
+    "Background keep alive enabled using a silent tune. If silent tune is interrupted by other apps, pod keep alive will stop working. The silent tune consumes extra iPhone battery." : {
+      "comment" : "Description for PodKeepAlive.silentTune"
+    },
+    "Background keep alive is off (default)." : {
+      "comment" : "Description for PodKeepAlive.disabled"
+    },
     "Background wake-ups from the pod are less frequent on this pod and phone combination." : {
       "comment" : "Subtitle of BLE heartbeat degraded notice row",
       "localizations" : {
@@ -9663,6 +9690,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bij deze combinatie van Pod en telefoon wekt de Pod de app op de achtergrond minder vaak."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activările în fundal de la pompă sunt mai puțin frecvente în această combinație de pompă și telefon."
           }
         },
         "zh-Hans" : {
@@ -13304,7 +13337,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vérifier le Pod, l'appliquer sur le site, puis confirmer la fixation du Pod."
+            "value" : "Vérifier le Pod, l'appliquer sur le site, puis confirmer sa fixation."
           }
         },
         "he" : {
@@ -16375,6 +16408,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verbinding maken met de Pod kan soms merkbaar langer duren dan normaal — af en toe tot 30 seconden — omdat vastgelopen pogingen worden herkend en automatisch opnieuw worden geprobeerd. Opdrachten worden gewoon uitgevoerd zodra de verbinding er is."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conectarea la pompă poate dura uneori semnificativ mai mult decât de obicei — ocazional până la 30 de secunde — în timp ce încercările blocate sunt detectate și repetate automat. Comenzile se finalizează în continuare odată ce conexiunea este stabilită."
           }
         },
         "zh-Hans" : {
@@ -25793,7 +25832,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Remplissez une nouvelle dosette %@ avec de l'insuline U-100 (laissez le capuchon de l'aiguille %@ en place). Écouter les 2 bips."
+            "value" : "Remplissez un nouveau pod %@ avec de l'insuline U-100 (laissez le capuchon de l'aiguille %@ en place). Attendez d’entendre 2 bips."
           }
         },
         "he" : {
@@ -31748,7 +31787,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La canule est-elle insérée correctement?"
+            "value" : "La canule est-elle insérée correctement ?"
           }
         },
         "he" : {
@@ -31863,6 +31902,7 @@
     },
     "Issues status requests to minimize Bluetooth disconnects. The default When Open selection should be sufficient for all iPhone and Pod combinations." : {
       "comment" : "Summary of the Pod Keep Alive concept",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -31874,6 +31914,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verstuurt statusverzoeken om het verbreken van de Bluetooth-verbinding zo veel mogelijk te voorkomen. De standaardkeuze 'Wanneer geopend' zou voor alle combinaties van iPhone en Pod moeten volstaan."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emite solicitări de stare pentru a minimiza deconectările Bluetooth. Selecția implicită \"Când este deschis\" ar trebui să fie suficientă pentru toate combinațiile de iPhone și pompă."
           }
         },
         "zh-Hans" : {
@@ -32065,6 +32111,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Als je telefoon dicht bij de Pod blijft, komt de verbinding sneller tot stand. Niet elke Pod gebruikt deze radio — een volgende Pod kan dus gewoon normaal verbinden."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dacă țineți telefonul lângă pompă, conexiunile se finalizează mai rapid. Nu toate pompele această frecvență radio - este posibil ca o pompă viitoare să se conecteze normal."
           }
         },
         "zh-Hans" : {
@@ -34271,7 +34323,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veillez à ce que votre dosette soit remplie et à proximité"
+            "value" : "Assurez-vous que votre pod est rempli et à proximité"
           }
         },
         "he" : {
@@ -36677,6 +36729,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Je hoeft niets te doen — dit is geen Pod-storing en de insulinetoediening wordt er niet door beïnvloed. De Pod gaat door met de geprogrammeerde toediening, ook als de verbinding even weg is."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nu este necesară nicio acțiune — aceasta nu este o defecțiune a pompei, iar administrarea insulinei nu este afectată. Pompa își continuă administrarea programată chiar și atunci când este deconectată."
           }
         },
         "zh-Hans" : {
@@ -41108,7 +41166,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Omnipode 5"
+            "value" : "Omnipod 5"
           }
         },
         "he" : {
@@ -43145,6 +43203,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ook het koppelen van een nieuwe Pod kan extra tijd of een extra poging nodig hebben."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conectarea unei noi pompe poate necesita, de asemenea, mai mult timp sau o nouă încercare."
           }
         },
         "zh-Hans" : {
@@ -47188,6 +47252,18 @@
             "value" : "Pod-verbindingen"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conexiuni pompă"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pumpanslutningar"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -50804,6 +50880,7 @@
     },
     "Pod keep alive enabled when app is in the foreground with phone unlocked. Attempt to keep pod connected by issuing additional pod status request after 2 minutes, 40 seconds." : {
       "comment" : "Description for PodKeepAlive.whenOpen",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -51007,6 +51084,7 @@
     },
     "Pod keep alive enabled. Additional pod status request issued after 2 minutes.\n\nRequires a RileyLink-compatible device within Bluetooth range. Allows pod keep alive messages when app is in background. This method uses less iPhone battery and slightly more DASH battery than the Silent Tune method. A RileyLink-compatible device must be enabled in pump view." : {
       "comment" : "Description for PodKeepAlive.rileyLink",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -51210,6 +51288,7 @@
     },
     "Pod keep alive enabled. Attempt to keep pod connected by issuing additional pod status request after 2 minutes, 40 seconds even when phone is locked by playing a silent tune. The silent tune may be interrupted by other apps. If silent tune is interrupted, pod keep alive stops working. The silent tune consumes extra iPhone battery." : {
       "comment" : "Description for PodKeepAlive.silentTune",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -51248,6 +51327,9 @@
           }
         }
       }
+    },
+    "Pod keep alive options to issue background status requests to minimize pod disconnects. Should no longer be needed for any iPhone and pod combination." : {
+      "comment" : "Summary of the Pod Keep Alive concept"
     },
     "Pod not connected" : {
       "comment" : "Error message shown when the pod is not connected.",
@@ -54554,6 +54636,18 @@
             "value" : "Pomp-heartbeat"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puls pompă"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pumphjärtslag"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -56701,6 +56795,12 @@
             "value" : "Gata de asociere cu o pompă Omnipod 5."
           }
         },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redo att parkopplas med en Omnipod 5 - pump"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -57052,6 +57152,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Minder vaak gewekt op de achtergrond"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activări din fundal reduse"
           }
         },
         "zh-Hans" : {
@@ -62993,6 +63099,12 @@
             "value" : "Stille Podmodus kan bij deze Pod alleen de bevestigingspiepjes onderdrukken."
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modul Pompă Silențioasă poate suprima doar semnalul sonor de reamintire a confirmării al acestei pompe."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -64478,6 +64590,12 @@
             "value" : "Tragere verbindingen verwacht"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se preconizează conexiuni mai lente"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -64570,6 +64688,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pasul %1$d din %2$d"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steg %1$d av %2$d"
           }
         },
         "zh-Hans" : {
@@ -69343,6 +69467,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "De gebruikelijke manier waarop de Pod de app op vaste tijden wekt, werkt niet bij deze combinatie. In plaats daarvan wordt de app gewekt wanneer de verbinding met de Pod wegvalt, waarna direct opnieuw verbinding wordt gemaakt."
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metoda obișnuită prin care pompa activează aplicația la un interval prestabilit nu poate fi utilizată în această configurație. În schimb, aplicația este activată atunci când conexiunea pompei se întrerupe, iar aceasta se reconectează imediat."
           }
         },
         "zh-Hans" : {
@@ -76020,6 +76150,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ce puteți face"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vad du kan göra"
           }
         },
         "zh-Hans" : {
