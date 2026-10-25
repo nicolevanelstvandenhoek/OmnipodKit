@@ -520,7 +520,7 @@ struct OmniSettingsView: View  {
                     HStack {
                         Text(localizedPodDetailsStr)
                         Spacer()
-                        Text("—")
+                        FrameworkLocalText("—", comment: "Omnipod UI text")
                             .foregroundColor(Color.secondary)
                     }
                 }
@@ -537,7 +537,7 @@ struct OmniSettingsView: View  {
                     HStack {
                         Text(localizedPreviousPodDetailsStr)
                         Spacer()
-                        Text("—")
+                        FrameworkLocalText("—", comment: "Omnipod UI text")
                             .foregroundColor(Color.secondary)
                     }
                 }
@@ -838,25 +838,25 @@ struct OmniSettingsView: View  {
         switch alert {
         case .suspendError(let error):
             return SwiftUI.Alert(
-                title: Text("Failed to Suspend Insulin Delivery", comment: "Alert title for suspend error"),
+                title: FrameworkLocalText("Failed to Suspend Insulin Delivery", comment: "Alert title for suspend error"),
                 message: Text(errorText(error))
             )
             
         case .resumeError(let error):
             return SwiftUI.Alert(
-                title: Text("Failed to Resume Insulin Delivery", comment: "Alert title for resume error"),
+                title: FrameworkLocalText("Failed to Resume Insulin Delivery", comment: "Alert title for resume error"),
                 message: Text(errorText(error))
             )
             
         case .syncTimeError(let error):
             return SwiftUI.Alert(
-                title: Text("Failed to Set Pump Time", comment: "Alert title for time sync error"),
+                title: FrameworkLocalText("Failed to Set Pump Time", comment: "Alert title for time sync error"),
                 message: Text(errorText(error))
             )
 
         case .cancelManualBasalError(let error):
             return SwiftUI.Alert(
-                title: Text("Failed to Cancel Manual Basal", comment: "Alert title for failing to cancel manual basal error"),
+                title: FrameworkLocalText("Failed to Cancel Manual Basal", comment: "Alert title for failing to cancel manual basal error"),
                 message: Text(errorText(error))
             )
 

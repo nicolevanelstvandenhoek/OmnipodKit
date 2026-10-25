@@ -128,7 +128,7 @@ struct BasalStateSwiftUIViewPreviewWrapper: View {
             Button(action: {
                 self.percent = self.percent * -1
             }) {
-                Text("Toggle sign")
+                FrameworkLocalText("Toggle sign", comment: "Omnipod UI text")
             }
             Text("Percent = \(percent)")
         }

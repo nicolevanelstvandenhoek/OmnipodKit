@@ -95,10 +95,10 @@ struct PodSetupView: View {
     }
     
     private var skipOnboardingAlert: Alert {
-        Alert(title: Text("Skip Omnipod Onboarding?"),
-              message: Text("Are you sure you want to skip Omnipod Onboarding?"),
+        Alert(title: FrameworkLocalText("Skip Omnipod Onboarding?", comment: "Omnipod UI text"),
+              message: FrameworkLocalText("Are you sure you want to skip Omnipod Onboarding?", comment: "Omnipod UI text"),
               primaryButton: .cancel(),
-              secondaryButton: .destructive(Text("Yes"), action: skipOnboarding))
+              secondaryButton: .destructive(FrameworkLocalText("Yes", comment: "Omnipod UI text"), action: skipOnboarding))
     }
     
     private func didLongPressOnTitle() {

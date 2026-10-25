@@ -101,7 +101,7 @@ struct PairPodView: View {
                     Button(action: {
                         self.viewModel.continueButtonTapped()
                     }) {
-                        Text("Abort")
+                        FrameworkLocalText("Abort", comment: "Omnipod UI text")
                             .actionButtonStyle(self.viewModel.podIsActivated ?
                                 .destructive : .primary)
                     }

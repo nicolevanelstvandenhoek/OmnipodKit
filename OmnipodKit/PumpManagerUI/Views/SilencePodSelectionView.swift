@@ -65,7 +65,7 @@ struct SilencePodSelectionView: View {
                 Section {
                     if self.noSilentBeep {
                         VStack(alignment: .center, spacing: 4) {
-                            Text("⚠️Warning - Unable to silence Pod alerts with the firmware in this particular Pod!")
+                            FrameworkLocalText("⚠️Warning - Unable to silence Pod alerts with the firmware in this particular Pod!", comment: "Omnipod UI text")
                                 .padding(.vertical, 10)
                                 .font(.body)
                                 .fontWeight(.bold)
@@ -289,7 +289,7 @@ struct OptionalDatePicker: View {
                 Button {
                     activatePicker()
                 } label: {
-                    Text("Not set")
+                    FrameworkLocalText("Not set", comment: "Omnipod UI text")
                         .foregroundColor(.secondary)
                 }
                 .buttonStyle(.plain)

@@ -39,7 +39,7 @@ struct PodKeepAliveView: View {
             List {
                 Section {
                     VStack(alignment: .center, spacing: 4) {
-                        Text("Pod keep alive options to issue background status requests to minimize pod disconnects. Should no longer be needed for any iPhone and pod combination.", comment: "Summary of the Pod Keep Alive concept")
+                        FrameworkLocalText("Pod keep alive options to issue background status requests to minimize pod disconnects. Should no longer be needed for any iPhone and pod combination.", comment: "Summary of the Pod Keep Alive concept")
                             .font(.body)
                             .foregroundColor(.primary)
                     }
@@ -74,7 +74,7 @@ struct PodKeepAliveView: View {
                     onChange?(preference)
                     self.presentationMode.wrappedValue.dismiss()
                 }) {
-                    Text("Save", comment: "button title for saving pod keep alive")
+                    FrameworkLocalText("Save", comment: "button title for saving pod keep alive")
                         .actionButtonStyle(.primary)
                 }
                 .padding()

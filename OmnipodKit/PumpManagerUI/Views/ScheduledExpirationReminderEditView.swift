@@ -84,7 +84,7 @@ struct ScheduledExpirationReminderEditView: View {
     }
 
     var picker: some View {
-        Picker(selection: $selectedDate, label: Text("Numbers")) {
+        Picker(selection: $selectedDate, label: FrameworkLocalText("Numbers", comment: "Omnipod UI text")) {
             ForEach(self.allowedDates, id: \.self) { date in
                 Text(scheduledReminderDateString(date)).tag(date as Date?)
             }
