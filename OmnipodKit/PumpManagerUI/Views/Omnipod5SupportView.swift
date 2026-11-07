@@ -64,7 +64,7 @@ struct Omnipod5SupportView: View {
 
             if certLoaded {
                 Button(action: { presentationMode.wrappedValue.dismiss() }) {
-                    Text(LocalizedString("OK", comment: "Button to dismiss the Omnipod 5 Support screen"))
+                    Text(LocalizedString("Close", comment: "Button to dismiss the Omnipod 5 Support screen"))
                         .actionButtonStyle(.primary)
                         .padding()
                 }
@@ -93,7 +93,7 @@ struct Omnipod5SupportView: View {
             ),
             presenting: importError
         ) { _ in
-            Button(LocalizedString("OK", comment: "OK button for import-failed alert")) {
+            Button(LocalizedString("Close", comment: "Close button for import-failed alert")) {
                 importError = nil
             }
         } message: { message in
