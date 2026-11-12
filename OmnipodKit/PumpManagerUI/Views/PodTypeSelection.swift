@@ -13,6 +13,7 @@ import LoopKitUI
 struct PodTypeSelection: View {
 
     @Environment(\.appName) private var appName
+    @Environment(\.colorScheme) private var colorScheme
 
     @State private var podType: PodType?
     private let o5NotAvailable: Bool
@@ -54,6 +55,7 @@ struct PodTypeSelection: View {
             }
             .disabled(podType == unknownOmnipodType)
         }
+        .background(OmniElara.isActive ? AnyView(OmniElara.background(colorScheme).ignoresSafeArea()) : AnyView(EmptyView()))
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(LocalizedString("Cancel", comment: "Cancel button title"), action: {
@@ -98,6 +100,8 @@ struct PodTypeChooser: View {
                     )
                 )
             }
+            // Elara: the chosen type stands out with a soft green card
+            .listRowBackground(OmniElara.isActive && self.podType == podType ? Color("LoopGreen").opacity(0.14) : nil)
         }
     }
 }

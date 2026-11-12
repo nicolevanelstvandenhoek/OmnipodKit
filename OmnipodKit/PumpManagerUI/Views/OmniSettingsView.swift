@@ -1147,6 +1147,22 @@ enum OmniElara {
         )
     }
 
+    /// An explanation with a round tinted icon in front (only in Elara).
+    @ViewBuilder static func infoLabel<Label: View>(_ label: Label, systemImage: String) -> some View {
+        if isActive {
+            HStack(alignment: .top, spacing: 10) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundColor(Color("LoopGreen"))
+                    .frame(width: 28, height: 28)
+                    .background(Circle().fill(Color("LoopGreen").opacity(0.14)))
+                label
+            }
+        } else {
+            label
+        }
+    }
+
     /// A row title with a tinted SF Symbol badge in front (only in Elara).
     @ViewBuilder static func actionLabel<Label: View>(_ label: Label, systemImage: String, color: Color) -> some View {
         if isActive {

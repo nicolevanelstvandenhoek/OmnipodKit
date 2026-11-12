@@ -21,6 +21,8 @@ struct ExpirationReminderPickerView: View {
     var collapsible: Bool = true
     
     @State var showingHourPicker: Bool = false
+
+    @Environment(\.colorScheme) private var colorScheme
     
     var expirationDefaultFormatter = QuantityFormatter(for: .hour)
     
@@ -30,6 +32,12 @@ struct ExpirationReminderPickerView: View {
     
     var body: some View {
         VStack {
+            if OmniElara.isActive && !collapsible {
+                OmniElara.tile(LocalizedString("Expiration Reminder Default", comment: "Label text for expiration reminder default row"), scheme: colorScheme) {
+                    Text(expirationDefaultString)
+                        .font(.system(size: 18, weight: .heavy))
+                }
+            } else {
             HStack {
                 Text(LocalizedString("Expiration Reminder Default", comment: "Label text for expiration reminder default row"))
                 Spacer()
@@ -42,6 +50,7 @@ struct ExpirationReminderPickerView: View {
                 } else {
                     Text(expirationDefaultString)
                 }
+            }
             }
             if showingHourPicker {
                 Picker(selection: expirationReminderDefault) {
@@ -58,7 +67,8 @@ struct ExpirationReminderPickerView: View {
     
     private func expirationReminderHourString(_ value: Int) -> String {
         if value > 0 {
-            return expirationDefaultFormatter.string(from: LoopQuantity(unit: .hour, doubleValue: Double(value)))!
+            // "7 u" instead of the shared formatter's untranslated "7 hr"
+            return "\(value) " + LocalizedString("h", comment: "Short unit for hours in pod life remaining")
         } else {
             return LocalizedString("No Reminder", comment: "Value text for no expiration reminder")
         }

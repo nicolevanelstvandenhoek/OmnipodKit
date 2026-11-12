@@ -21,8 +21,13 @@ struct ExpirationReminderSetupView: View {
     var body: some View {
         GuidePage(content: {
             VStack(alignment: .leading, spacing: 15) {
-                Text(LocalizedString("You will be notified in advance of Pod expiration.\n\nScroll to set the number of hours advance notice you would like to have.", comment: "Description text on ExpirationReminderSetupView")).fixedSize(horizontal: false, vertical: true)
-                Divider()
+                OmniElara.infoLabel(
+                    Text(LocalizedString("You will be notified in advance of Pod expiration.\n\nScroll to set the number of hours advance notice you would like to have.", comment: "Description text on ExpirationReminderSetupView")).fixedSize(horizontal: false, vertical: true),
+                    systemImage: "bell.fill"
+                )
+                if !OmniElara.isActive {
+                    Divider()
+                }
                 ExpirationReminderPickerView(expirationReminderDefault: $expirationReminderDefault, collapsible: false, showingHourPicker: true)
                     .onChange(of: expirationReminderDefault) { _, value in
                         valueChanged?(value)
@@ -40,7 +45,9 @@ struct ExpirationReminderSetupView: View {
             }
             .padding()
         }
-        .navigationTitle(LocalizedString("Expiration Reminder", comment: "navigation title for Expiration Reminder"))
+        .navigationTitle(OmniElara.isActive
+            ? LocalizedString("Reminder", comment: "Short navigation title for the pod expiration reminder (Elara)")
+            : LocalizedString("Expiration Reminder", comment: "navigation title for Expiration Reminder"))
         .navigationBarTitleDisplayMode(.automatic)
         .navigationBarHidden(false)
         .toolbar {

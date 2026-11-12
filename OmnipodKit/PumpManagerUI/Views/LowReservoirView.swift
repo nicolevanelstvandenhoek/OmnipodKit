@@ -12,6 +12,7 @@ import LoopKitUI
 import LoopKit
 
 struct LowReservoirView: View {
+    @Environment(\.colorScheme) private var colorScheme
     private var reservoirLevel: Double // current reservoir level
     private var setDefault: Bool // true if setting the default low reservoir value
     private var initialValue: Int
@@ -69,12 +70,12 @@ struct LowReservoirView: View {
         self._selectedValue = State(initialValue: defaultValue)
 
         if setDefault {
-            self.title = "Low Reservoir Default"
+            self.title = LocalizedString("Low Reservoir Default", comment: "Title of the low reservoir default page")
             self.prompt = String(format: LocalizedString("You can be optionally notified when the amount of insulin remaining in the reservoir reaches a selected level (1 - %1$@ units).\n\nSet the default low reservoir alert level to configure when pairing a Pod.",
                 comment: "Description text on LowReservoirView Default value (1: max value)"),
                 String(describing: self.maxValue))
         } else {
-            self.title = "Low Reservoir"
+            self.title = LocalizedString("Low Reservoir", comment: "Title of the low reservoir page")
             self.prompt = String(format: LocalizedString("You can be optionally notified when the amount of insulin in the current Pod drops to a selected level below the current reservoir value of %1$@ units.\n\nSet the low reservoir alert level for the current Pod.", comment: "Description text on LowReservoirView for the current Pod (1: current reservoir value"), reservoirLevelString)
         }
     }
@@ -86,12 +87,19 @@ struct LowReservoirView: View {
     var content: some View {
         GuidePage(content: {
             VStack(alignment: .leading, spacing: 8) {
-                Text(prompt)
+                OmniElara.infoLabel(Text(prompt), systemImage: "drop.fill")
+                if OmniElara.isActive {
+                    OmniElara.tile(title, scheme: colorScheme) {
+                        Text(formatLowReservoirAlertValue(selectedValue) + (selectedValue > 0 ? " " + LocalizedString("U", comment: "Insulin unit") : ""))
+                            .font(.system(size: 18, weight: .heavy))
+                    }
+                } else {
                 Divider()
                 HStack {
                     Text(title)
                     Spacer()
                     Text(formatLowReservoirAlertValue(selectedValue))
+                }
                 }
                 picker
             }

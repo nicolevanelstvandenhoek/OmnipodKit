@@ -70,7 +70,12 @@ struct ManualTempBasalEntryView: View {
     }
 
     func formatDuration(_ duration: TimeInterval) -> String {
-        return ManualTempBasalEntryView.durationFormatter.string(from: LoopQuantity(unit: .hour, doubleValue: duration.hours)) ?? ""
+        // Own unit word: the shared formatter capitalizes it in some languages ("0,5 Uur")
+        let number = ManualTempBasalEntryView.durationFormatter.numberFormatter.string(from: NSNumber(value: duration.hours)) ?? ""
+        let unit = duration.hours == 1
+            ? LocalizedString("hour", comment: "Unit for singular hour in pod life remaining")
+            : LocalizedString("hours", comment: "Unit for plural hours in pod life remaining")
+        return number + " " + unit
     }
 
     var body: some View {

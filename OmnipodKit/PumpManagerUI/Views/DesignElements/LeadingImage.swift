@@ -28,6 +28,9 @@ struct LeadingImage: View {
             .aspectRatio(contentMode: ContentMode.fit)
             .frame(height: self.verticalSizeClass == .compact ? LeadingImage.compactScreenImageHeight : LeadingImage.regularScreenImageHeight)
             .padding(.vertical, self.verticalSizeClass == .compact ? 0 : nil)
+            // Elara: a soft green glow under the device picture
+            .shadow(color: OmniElara.isActive ? Color("LoopGreen").opacity(0.28) : .clear, radius: 18, y: 8)
+            .frame(maxWidth: .infinity)
     }
 }
 
