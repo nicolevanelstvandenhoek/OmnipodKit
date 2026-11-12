@@ -39,6 +39,9 @@ struct OmniSettingsView: View  {
 
     @Environment(\.guidanceColors) var guidanceColors
     @Environment(\.insulinTintColor) var insulinTintColor
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var isElara: Bool { OmniElara.isActive }
 
     private var daysRemaining: Int? {
         if case .timeRemaining(let remaining, _) = viewModel.lifeState, remaining > .days(1) {
@@ -211,7 +214,11 @@ struct OmniSettingsView: View  {
         Button(action: {
             self.manualBasalTapped()
         }) {
-            FrameworkLocalText("Set Temporary Basal Rate", comment: "Button title to set temporary basal rate")
+            OmniElara.actionLabel(
+                FrameworkLocalText("Set Temporary Basal Rate", comment: "Button title to set temporary basal rate"),
+                systemImage: "gauge.with.dots.needle.33percent",
+                color: .blue
+            )
         }
         .sheet(isPresented: $showManualTempBasalOptions) {
             ManualTempBasalEntryView(
@@ -255,7 +262,9 @@ struct OmniSettingsView: View  {
     }
 
     private var doneButton: some View {
-        Button(LocalizedString("Done", comment: "Title of done button on OmniSettingsView"), action: {
+        Button(isElara
+            ? LocalizedString("Close", comment: "Close button on the Elara pod settings screen")
+            : LocalizedString("Done", comment: "Title of done button on OmniSettingsView"), action: {
             self.viewModel.doneTapped()
         })
     }
@@ -270,9 +279,193 @@ struct OmniSettingsView: View  {
         }.frame(maxWidth: .infinity)
     }
 
+    // MARK: - Elara
+
+    /// "1 day 5 h" style time left, from the same parts as the classic view.
+    private var elaraRemainingText: String? {
+        var parts: [String] = []
+        if let days = daysRemaining {
+            parts.append("\(days) " + (days == 1 ? LocalizedString("day", comment: "Unit for singular day in pod life remaining") : LocalizedString("days", comment: "Unit for plural days in pod life remaining")))
+        }
+        if let hours = hoursRemaining {
+            parts.append("\(hours) " + LocalizedString("h", comment: "Short unit for hours in pod life remaining"))
+        }
+        if let minutes = minutesRemaining {
+            parts.append("\(minutes) " + LocalizedString("min", comment: "Short unit for minutes in pod life remaining"))
+        }
+        return parts.isEmpty ? nil : parts.joined(separator: " ")
+    }
+
+    private var elaraShortDate: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("EEEMMMdjmm")
+        return formatter
+    }
+
+    /// Elara version of the pod card: pod image, time left with its bar and dates, then tiles.
+    private var elaraPodCard: some View {
+        VStack(spacing: 10) {
+            HStack(spacing: 14) {
+                Image(frameworkImage: "Pod")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 84, height: 70)
+                    .opacity(viewModel.podOk ? 1 : 0.4)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(viewModel.lifeState.localizedLabelText)
+                        .font(.subheadline)
+                        .foregroundColor(viewModel.lifeState.labelColor(using: guidanceColors))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                    if let remaining = elaraRemainingText {
+                        Text(remaining)
+                            .font(.system(size: 22, weight: .heavy))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                    }
+                    ProgressView(progress: CGFloat(viewModel.lifeState.progress))
+                        .accentColor(viewModel.lifeState.progressColor(guidanceColors: guidanceColors))
+                    if let activatedAt = viewModel.activatedAt, let expiresAt = viewModel.expiresAt {
+                        Text(elaraShortDate.string(from: activatedAt) + " – " + elaraShortDate.string(from: expiresAt))
+                            .font(.caption)
+                            .foregroundColor(OmniElara.muted)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.6)
+                    }
+                }
+                Spacer(minLength: 0)
+            }
+            .overlay(alignment: .topTrailing) {
+                Button(action: {
+                    sendingTestBeepsCommand = true
+                    Task { @MainActor in
+                        defer { sendingTestBeepsCommand = false }
+                        try? await viewModel.playTestBeeps()
+                    }
+                }) {
+                    Image(systemName: "speaker.wave.2.circle")
+                        .imageScale(.large)
+                        .foregroundColor(viewModel.hasConnection ? .accentColor : .secondary)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .accessibilityLabel(LocalizedString("Play Test Beeps", comment: "Accessibility label for the button that plays test beeps"))
+                .disabled(sendingTestBeepsCommand)
+            }
+
+            LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
+                OmniElara.tile(deliverySectionTitle, scheme: colorScheme) { elaraDeliveryValue }
+                OmniElara.tile(LocalizedString("Insulin Remaining", comment: "Header for insulin remaining on pod settings screen"), scheme: colorScheme) { elaraReservoirValue }
+                OmniElara.tile(LocalizedString("Status", comment: "Elara pod card tile: pod status"), scheme: colorScheme) { elaraStatusValue }
+                OmniElara.tile(LocalizedString("Warnings", comment: "Elara pod card tile: active pod notices"), scheme: colorScheme) {
+                    Text(viewModel.notice?.title ?? LocalizedString("None", comment: "Elara pod card: no warnings"))
+                        .font(.system(size: 15, weight: .heavy))
+                        .foregroundColor(viewModel.notice == nil ? .primary : guidanceColors.warning)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.7)
+                }
+            }
+
+            OmniElara.tile(LocalizedString("Site", comment: "Elara pod card tile: where the pod was last placed"), minHeight: 0, scheme: colorScheme) {
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Image(systemName: "bandage")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundColor(Color("LoopGreen"))
+                    if let site = UserDefaults.standard.string(forKey: "TrioElaraPodSite") {
+                        Text(site)
+                            .font(.system(size: 15, weight: .heavy))
+                            .lineLimit(1)
+                        if let placedAt = UserDefaults.standard.object(forKey: "TrioElaraPodSiteDate") as? Date {
+                            Text(elaraShortDate.string(from: placedAt))
+                                .font(.caption)
+                                .foregroundColor(OmniElara.muted)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
+                        }
+                    } else {
+                        Text("–").font(.system(size: 15, weight: .heavy))
+                    }
+                    Spacer(minLength: 0)
+                }
+            }
+        }
+        .padding(.vertical, 4)
+    }
+
+    @ViewBuilder private var elaraDeliveryValue: some View {
+        if viewModel.podOk, viewModel.isSuspendedOrResuming {
+            Text(LocalizedString("Insulin Suspended", comment: "Elara pod card: delivery suspended"))
+                .font(.system(size: 15, weight: .heavy))
+                .foregroundColor(viewModel.suspendResumeButtonColor(guidanceColors: guidanceColors))
+                .lineLimit(2)
+                .minimumScaleFactor(0.7)
+        } else if let basalRate = viewModel.basalDeliveryRate {
+            HStack(alignment: .firstTextBaseline, spacing: 3) {
+                Text(viewModel.basalRateFormatter.string(from: basalRate) ?? "")
+                    .font(.system(size: 20, weight: .heavy))
+                FrameworkLocalText("U/hr", comment: "Units for showing temp basal rate")
+                    .font(.caption.weight(.semibold))
+                    .foregroundColor(OmniElara.muted)
+            }
+        } else {
+            FrameworkLocalText("No Delivery", comment: "Label for No Delivery row")
+                .font(.system(size: 15, weight: .heavy))
+                .foregroundColor(guidanceColors.critical)
+        }
+    }
+
+    @ViewBuilder private var elaraReservoirValue: some View {
+        if let podError = viewModel.podError {
+            Text(podError)
+                .font(.system(size: 15, weight: .heavy))
+                .foregroundColor(guidanceColors.critical)
+                .lineLimit(2)
+                .minimumScaleFactor(0.7)
+        } else if let reservoirLevel = viewModel.reservoirLevel, let state = viewModel.reservoirLevelHighlightState {
+            HStack(spacing: 6) {
+                reservoir(filledPercent: CGFloat(reservoirLevel.percentage), fillColor: reservoirColor(for: state))
+                    .scaleEffect(0.7)
+                    .frame(width: 16, height: 22)
+                Text(viewModel.reservoirText(for: reservoirLevel))
+                    .font(.system(size: 20, weight: .heavy))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+            }
+        } else {
+            FrameworkLocalText("No Pod", comment: "Text shown in insulin remaining space when no pod is paired")
+                .font(.system(size: 15, weight: .heavy))
+                .foregroundColor(guidanceColors.warning)
+        }
+    }
+
+    @ViewBuilder private var elaraStatusValue: some View {
+        if viewModel.podError != nil {
+            Text(LocalizedString("Error", comment: "Elara pod card: pod status with an error"))
+                .font(.system(size: 15, weight: .heavy))
+                .foregroundColor(guidanceColors.critical)
+        } else if viewModel.noPod {
+            FrameworkLocalText("No Pod", comment: "Text shown in insulin remaining space when no pod is paired")
+                .font(.system(size: 15, weight: .heavy))
+                .foregroundColor(guidanceColors.warning)
+        } else {
+            Text(LocalizedString("Active", comment: "Elara pod card: pod status when working"))
+                .font(.system(size: 15, weight: .heavy))
+                .foregroundColor(Color("LoopGreen"))
+        }
+    }
+
     var body: some View {
         List {
+            Group {
             Section() {
+                if isElara {
+                    elaraPodCard
+                    if let faultAction = viewModel.recoveryText {
+                        Text(faultAction)
+                            .font(Font.footnote.weight(.semibold))
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                } else {
                 VStack(alignment: .trailing) {
                     Button(action: {
                         sendingTestBeepsCommand = true
@@ -319,6 +512,7 @@ struct OmniSettingsView: View  {
                             .fixedSize(horizontal: false, vertical: true)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
+                }
                 }
                 if let notice = viewModel.notice {
                     VStack(alignment: .leading, spacing: 4) {
@@ -448,8 +642,12 @@ struct OmniSettingsView: View  {
                     Button(action: {
                         self.viewModel.navigateTo?(.deactivate)
                     }) {
-                        Text(lifeState.nextPodLifecycleActionDescription)
-                            .foregroundColor(lifeState.nextPodLifecycleActionColor)
+                        OmniElara.actionLabel(
+                            Text(lifeState.nextPodLifecycleActionDescription)
+                                .foregroundColor(lifeState.nextPodLifecycleActionColor),
+                            systemImage: "xmark",
+                            color: lifeState.nextPodLifecycleActionColor
+                        )
                     }
                 }
             }
@@ -737,7 +935,11 @@ struct OmniSettingsView: View  {
                     }
                 }
             }
+            }
+            .listRowBackground(isElara ? OmniElara.cardFill(colorScheme) : nil)
         }
+        .scrollContentBackground(isElara ? .hidden : .automatic)
+        .background(isElara ? AnyView(OmniElara.background(colorScheme).ignoresSafeArea()) : AnyView(EmptyView()))
         .onAppear {
             rileyLinkListDataSource.isScanningEnabled = (viewModel.podType.isEros || viewModel.podKeepAlivePreference == .rileyLink)
         }
@@ -897,4 +1099,67 @@ struct OmniSettingsView: View  {
         }
     }
 
+}
+
+
+/// Shared Elara styling for the Omnipod screens. Trio sets "TrioElaraSkinActive" when the skin is on.
+enum OmniElara {
+    static var isActive: Bool { UserDefaults.standard.bool(forKey: "TrioElaraSkinActive") }
+
+    static let muted = Color(red: 143 / 255, green: 148 / 255, blue: 156 / 255)
+
+    static func cardFill(_ scheme: ColorScheme) -> Color {
+        scheme == .dark ? Color.white.opacity(0.06) : Color.white.opacity(0.8)
+    }
+
+    static func background(_ scheme: ColorScheme) -> LinearGradient {
+        scheme == .dark
+            ? LinearGradient(colors: [Color(red: 0.08, green: 0.15, blue: 0.35), Color(red: 0.05, green: 0.09, blue: 0.19), Color(red: 0.04, green: 0.06, blue: 0.11)], startPoint: .top, endPoint: .bottom)
+            : LinearGradient(colors: [Color(red: 0.86, green: 0.92, blue: 0.81), Color(red: 0.96, green: 0.97, blue: 0.94)], startPoint: .top, endPoint: .bottom)
+    }
+
+    /// A small heading over a value on a soft tile, like the G7 screen.
+    static func tile<Content: View>(
+        _ label: String,
+        minHeight: CGFloat = 46,
+        scheme: ColorScheme,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(label.uppercased())
+                .font(.system(size: 9, weight: .heavy))
+                .kerning(0.6)
+                .foregroundColor(muted)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+            content()
+        }
+        .frame(maxWidth: .infinity, minHeight: minHeight, alignment: .topLeading)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(scheme == .dark ? Color.white.opacity(0.05) : Color.black.opacity(0.03))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .strokeBorder(scheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.06), lineWidth: 1)
+        )
+    }
+
+    /// A row title with a tinted SF Symbol badge in front (only in Elara).
+    @ViewBuilder static func actionLabel<Label: View>(_ label: Label, systemImage: String, color: Color) -> some View {
+        if isActive {
+            HStack(spacing: 10) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundColor(color)
+                    .frame(width: 26, height: 26)
+                    .background(RoundedRectangle(cornerRadius: 8, style: .continuous).fill(color.opacity(0.14)))
+                label
+            }
+        } else {
+            label
+        }
+    }
 }

@@ -31,19 +31,30 @@ struct PodDiagnosticsView: View  {
     var podOk: Bool
     var noPod: Bool
 
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
         List {
+            Group {
             NavigationLink(destination: ReadPodStatusView(getDetailedStatus: diagnosticCommands.getDetailedStatus)) {
-                FrameworkLocalText("Read Pod Status", comment: "Text for read pod status navigation link")
-                    .foregroundColor(Color.primary)
+                OmniElara.actionLabel(
+                    FrameworkLocalText("Read Pod Status", comment: "Text for read pod status navigation link")
+                        .foregroundColor(Color.primary),
+                    systemImage: "info.circle",
+                    color: .blue
+                )
             }
             .disabled(noPod)
 
             NavigationLink(destination: PlayTestBeepsView(playTestBeeps: {
                 try await diagnosticCommands.playTestBeeps()
             })) {
-                FrameworkLocalText("Play Test Beeps", comment: "Text for play test beeps navigation link")
-                    .foregroundColor(Color.primary)
+                OmniElara.actionLabel(
+                    FrameworkLocalText("Play Test Beeps", comment: "Text for play test beeps navigation link")
+                        .foregroundColor(Color.primary),
+                    systemImage: "speaker.wave.2",
+                    color: Color("LoopGreen")
+                )
             }
             .disabled(!podOk)
 
@@ -53,8 +64,12 @@ struct PodDiagnosticsView: View  {
                 failedString: LocalizedString("Failed to read pulse log", comment: "Alert title for error when reading pulse log"),
                 action: { try await diagnosticCommands.readPulseLog() }))
             {
-                FrameworkLocalText("Read Pulse Log", comment: "Text for read pulse log navigation link")
-                    .foregroundColor(Color.primary)
+                OmniElara.actionLabel(
+                    FrameworkLocalText("Read Pulse Log", comment: "Text for read pulse log navigation link")
+                        .foregroundColor(Color.primary),
+                    systemImage: "list.bullet.rectangle",
+                    color: .gray
+                )
             }
             .disabled(noPod)
 
@@ -64,8 +79,12 @@ struct PodDiagnosticsView: View  {
                 failedString: LocalizedString("Failed to read pulse log plus", comment: "Alert title for error when reading pulse log plus"),
                 action: { try await diagnosticCommands.readPulseLogPlus() }))
             {
-                FrameworkLocalText("Read Pulse Log Plus", comment: "Text for read pulse log plus navigation link")
-                    .foregroundColor(Color.primary)
+                OmniElara.actionLabel(
+                    FrameworkLocalText("Read Pulse Log Plus", comment: "Text for read pulse log plus navigation link")
+                        .foregroundColor(Color.primary),
+                    systemImage: "list.bullet.rectangle.portrait",
+                    color: .gray
+                )
             }
             .disabled(noPod)
 
@@ -75,8 +94,12 @@ struct PodDiagnosticsView: View  {
                 failedString: LocalizedString("Failed to read activation time", comment: "Alert title for error when reading activation time"),
                 action: { try await diagnosticCommands.readActivationTime() }))
             {
-                FrameworkLocalText("Read Activation Time", comment: "Text for read activation time navigation link")
-                    .foregroundColor(Color.primary)
+                OmniElara.actionLabel(
+                    FrameworkLocalText("Read Activation Time", comment: "Text for read activation time navigation link")
+                        .foregroundColor(Color.primary),
+                    systemImage: "timer",
+                    color: .orange
+                )
             }
             .disabled(noPod)
 
@@ -86,19 +109,31 @@ struct PodDiagnosticsView: View  {
                 failedString: LocalizedString("Failed to read triggered alerts", comment: "Alert title for error when reading triggered alerts"),
                 action: { try await diagnosticCommands.readTriggeredAlerts() }))
             {
-                FrameworkLocalText("Read Triggered Alerts", comment: "Text for read triggered alerts navigation link")
-                    .foregroundColor(Color.primary)
+                OmniElara.actionLabel(
+                    FrameworkLocalText("Read Triggered Alerts", comment: "Text for read triggered alerts navigation link")
+                        .foregroundColor(Color.primary),
+                    systemImage: "exclamationmark.triangle",
+                    color: .red
+                )
             }
             .disabled(noPod)
 
             NavigationLink(destination: PumpManagerDetailsView() { diagnosticCommands.pumpManagerDetails() })
             {
-                FrameworkLocalText("Pump Manager Details", comment: "Text for pump manager details navigation link")
-                    .foregroundColor(Color.primary)
+                OmniElara.actionLabel(
+                    FrameworkLocalText("Pump Manager Details", comment: "Text for pump manager details navigation link")
+                        .foregroundColor(Color.primary),
+                    systemImage: "gearshape",
+                    color: .gray
+                )
             }
 
+            }
+            .listRowBackground(OmniElara.isActive ? OmniElara.cardFill(colorScheme) : nil)
         }
         .insetGroupedListStyle()
+        .scrollContentBackground(OmniElara.isActive ? .hidden : .automatic)
+        .background(OmniElara.isActive ? AnyView(OmniElara.background(colorScheme).ignoresSafeArea()) : AnyView(EmptyView()))
         .navigationTitle(title)
     }
 }

@@ -15,6 +15,7 @@ import LoopKit
 struct ManualTempBasalEntryView: View {
 
     @Environment(\.guidanceColors) var guidanceColors
+    @Environment(\.colorScheme) private var colorScheme
 
     var enactBasal: ((Double,TimeInterval,@escaping (PumpManagerError?)->Void) -> Void)?
     var didCancel: (() -> Void)?
@@ -76,11 +77,32 @@ struct ManualTempBasalEntryView: View {
         NavigationView {
             VStack {
                 List {
+                    Group {
+                    if OmniElara.isActive {
+                        // The chosen rate and duration as tiles above the wheels
+                        HStack(spacing: 8) {
+                            OmniElara.tile(LocalizedString("Rate", comment: "Label text for basal rate summary"), scheme: colorScheme) {
+                                Text(formatRate(rateEntered))
+                                    .font(.system(size: 18, weight: .heavy))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.7)
+                            }
+                            OmniElara.tile(LocalizedString("Duration", comment: "Elara temp basal tile: duration"), scheme: colorScheme) {
+                                Text(formatDuration(durationEntered))
+                                    .font(.system(size: 18, weight: .heavy))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.7)
+                            }
+                        }
+                    } else {
                     HStack {
                         Text(LocalizedString("Rate", comment: "Label text for basal rate summary"))
                         Spacer()
                         Text(String(format: LocalizedString("%1$@ for %2$@", comment: "Summary string for temporary basal rate configuration page"), formatRate(rateEntered), formatDuration(durationEntered)))
                     }
+                    }
+                    }
+                    .listRowBackground(OmniElara.isActive ? OmniElara.cardFill(colorScheme) : nil)
                     HStack {
                         Picker(selection: $rateEntered) {
                             ForEach(allowedRates, id: \.self) { value in
@@ -102,13 +124,23 @@ struct ManualTempBasalEntryView: View {
                     }
                     .frame(maxHeight: 162.0)
                     .alert(isPresented: $showingMissingConfigAlert, content: { missingConfigAlert })
+                    .listRowBackground(OmniElara.isActive ? OmniElara.cardFill(colorScheme) : nil)
                     Section {
-                        Text(LocalizedString("Your insulin delivery will not be automatically adjusted until the temporary basal rate finishes or is canceled.", comment: "Description text on manual temp basal action sheet"))
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                            .fixedSize(horizontal: false, vertical: true)
+                        HStack(alignment: .top, spacing: 8) {
+                            if OmniElara.isActive {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .font(.footnote)
+                                    .foregroundColor(guidanceColors.warning)
+                            }
+                            Text(LocalizedString("Your insulin delivery will not be automatically adjusted until the temporary basal rate finishes or is canceled.", comment: "Description text on manual temp basal action sheet"))
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .listRowBackground(OmniElara.isActive ? guidanceColors.warning.opacity(0.14) : nil)
                     }
                 }
+                .scrollContentBackground(OmniElara.isActive ? .hidden : .automatic)
                 Button(action: {
                     enacting = true
                     enactBasal?(rateEntered, durationEntered) { (error) in
@@ -130,6 +162,7 @@ struct ManualTempBasalEntryView: View {
                 .buttonStyle(ActionButtonStyle(.primary))
                 .padding()
             }
+            .background(OmniElara.isActive ? AnyView(OmniElara.background(colorScheme).ignoresSafeArea()) : AnyView(EmptyView()))
             .navigationTitle(LocalizedString("Temporary Basal", comment: "Navigation Title for ManualTempBasalEntryView"))
             .navigationBarItems(trailing: cancelButton)
             .alert(isPresented: $showingErrorAlert, content: { errorAlert })
