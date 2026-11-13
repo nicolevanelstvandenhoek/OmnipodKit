@@ -387,6 +387,25 @@ struct OmniSettingsView: View  {
                     Spacer(minLength: 0)
                 }
             }
+
+            if let details = viewModel.podDetails {
+                OmniElara.tile(LocalizedString("Lot", comment: "description label for lot pod details row"), minHeight: 0, scheme: colorScheme) {
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Text(details.podType.isEros
+                            ? String(format: "L%05u", details.lotNumber)
+                            : lotDecode(lot: details.lotNumber).readableText)
+                            .font(.system(size: 15, weight: .heavy))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                        Text(String(format: "%07d", details.sequenceNumber))
+                            .font(.caption)
+                            .foregroundColor(OmniElara.muted)
+                            .lineLimit(1)
+                        Spacer(minLength: 0)
+                    }
+                    .textSelection(.enabled)
+                }
+            }
         }
         .padding(.vertical, 4)
     }
