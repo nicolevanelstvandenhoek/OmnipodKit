@@ -42524,7 +42524,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Omnipod DASH Pods hebben een blauw naaldlipje met een PARTIJNUMMER van 12 tekens dat meestal begint met 'PD1'."
+            "value" : "Omnipod DASH Pods hebben een blauw naaldlipje met een LOTNUMMER van 12 tekens dat meestal begint met 'PD1'."
           }
         },
         "pl" : {

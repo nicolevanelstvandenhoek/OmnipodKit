@@ -365,6 +365,29 @@ struct OmniSettingsView: View  {
                 }
             }
 
+            // The lot as printed on the pod (e.g. PD1K01142651), with its sequence number
+            if let podDetails = viewModel.podDetails {
+                OmniElara.tile(LocalizedString("Lot Number", comment: "description label for lot number pod details row"), minHeight: 0, scheme: colorScheme) {
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Image(systemName: "number")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(Color("LoopGreen"))
+                        Text(podDetails.podType.isEros
+                            ? String(format: "L%05u", podDetails.lotNumber)
+                            : lotDecode(lot: podDetails.lotNumber).readableText)
+                            .font(.system(size: 15, weight: .heavy))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                            .textSelection(.enabled)
+                        Text(String(format: "%07d", podDetails.sequenceNumber))
+                            .font(.caption)
+                            .foregroundColor(OmniElara.muted)
+                            .lineLimit(1)
+                        Spacer(minLength: 0)
+                    }
+                }
+            }
+
             OmniElara.tile(LocalizedString("Site", comment: "Elara pod card tile: where the pod was last placed"), minHeight: 0, scheme: colorScheme) {
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Image(systemName: "bandage")
