@@ -243,12 +243,22 @@ struct OmniSettingsView: View  {
             Button(action: {
                 self.suspendResumeTapped()
             }) {
+                if isElara {
+                    // Elara: the same rounded-square badge as the other actions
+                    OmniElara.actionLabel(
+                        Text(viewModel.suspendResumeActionText)
+                            .foregroundColor(viewModel.suspendResumeActionColor()),
+                        systemImage: viewModel.isSuspendedOrResuming ? "play.fill" : "pause.fill",
+                        color: viewModel.suspendResumeButtonColor(guidanceColors: guidanceColors)
+                    )
+                } else {
                 HStack {
                     Image(systemName: "pause.circle.fill")
                         .font(.system(size: 22))
                         .foregroundColor(viewModel.suspendResumeButtonColor(guidanceColors: guidanceColors))
                     Text(viewModel.suspendResumeActionText)
                         .foregroundColor(viewModel.suspendResumeActionColor())
+                }
                 }
             }
             .actionSheet(isPresented: $showSuspendOptions) {
@@ -629,6 +639,7 @@ struct OmniSettingsView: View  {
                     }
                 }
             }
+            .elaraTightSection(isElara)
 
             if lifeState.nextPodLifecycleAction == .deactivate {
                 Section() {
@@ -660,6 +671,7 @@ struct OmniSettingsView: View  {
                     }
                 }
                 .disabled(cancelingTempBasal || !self.viewModel.podOk)
+                .elaraTightSection(isElara)
 
                 Section() {
                     Button(action: {
@@ -673,6 +685,7 @@ struct OmniSettingsView: View  {
                         )
                     }
                 }
+                .elaraTightSection(isElara)
             }
 
             if self.viewModel.podType.isEros {
@@ -1124,6 +1137,17 @@ struct OmniSettingsView: View  {
 
 }
 
+
+extension View {
+    /// Elara: action sections sit close together (8 pt) instead of the list's default gap.
+    @ViewBuilder func elaraTightSection(_ active: Bool) -> some View {
+        if active {
+            listSectionSpacing(8)
+        } else {
+            self
+        }
+    }
+}
 
 /// Shared Elara styling for the Omnipod screens. Trio sets "TrioElaraSkinActive" when the skin is on.
 enum OmniElara {
