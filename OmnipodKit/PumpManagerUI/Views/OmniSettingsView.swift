@@ -35,6 +35,9 @@ struct OmniSettingsView: View  {
 
     @State private var cancelingTempBasal = false
 
+    /// Bumped after choosing a site so the site tile reads the new value.
+    @State private var siteRevision = 0
+
     var supportedInsulinTypes: [InsulinType]
 
     @Environment(\.guidanceColors) var guidanceColors
@@ -398,28 +401,47 @@ struct OmniSettingsView: View  {
                 }
             }
 
-            OmniElara.tile(LocalizedString("Site", comment: "Elara pod card tile: where the pod was last placed"), minHeight: 0, scheme: colorScheme) {
-                HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Image(systemName: "bandage")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(Color("LoopGreen"))
-                    if let site = UserDefaults.standard.string(forKey: "TrioElaraPodSite") {
-                        Text(site)
-                            .font(.system(size: 15, weight: .heavy))
-                            .lineLimit(1)
-                        if let placedAt = UserDefaults.standard.object(forKey: "TrioElaraPodSiteDate") as? Date {
-                            Text(elaraShortDate.string(from: placedAt))
-                                .font(.caption)
-                                .foregroundColor(OmniElara.muted)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.7)
-                        }
-                    } else {
-                        Text("–").font(.system(size: 15, weight: .heavy))
+            // Tap to choose another site; the app stores it in its site log
+            let _ = siteRevision
+            Menu {
+                ForEach((UserDefaults.standard.array(forKey: "TrioElaraPodSites") as? [[String: String]]) ?? [], id: \.self) { site in
+                    Button(site["label"] ?? "") {
+                        UserDefaults.standard.set(site["label"], forKey: "TrioElaraPodSite")
+                        UserDefaults.standard.set(viewModel.activatedAt ?? Date(), forKey: "TrioElaraPodSiteDate")
+                        var info: [String: Any] = ["kind": "patch", "site": site["id"] ?? ""]
+                        if let activatedAt = viewModel.activatedAt { info["activatedAt"] = activatedAt }
+                        NotificationCenter.default.post(name: Notification.Name("TrioElaraSiteChosen"), object: nil, userInfo: info)
+                        siteRevision += 1
                     }
-                    Spacer(minLength: 0)
+                }
+            } label: {
+                OmniElara.tile(LocalizedString("Site", comment: "Elara pod card tile: where the pod was last placed"), minHeight: 0, scheme: colorScheme) {
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Image(systemName: "bandage")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(Color("LoopGreen"))
+                        if let site = UserDefaults.standard.string(forKey: "TrioElaraPodSite") {
+                            Text(site)
+                                .font(.system(size: 15, weight: .heavy))
+                                .lineLimit(1)
+                            if let placedAt = UserDefaults.standard.object(forKey: "TrioElaraPodSiteDate") as? Date {
+                                Text(elaraShortDate.string(from: placedAt))
+                                    .font(.caption)
+                                    .foregroundColor(OmniElara.muted)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.7)
+                            }
+                        } else {
+                            Text("–").font(.system(size: 15, weight: .heavy))
+                        }
+                        Spacer(minLength: 0)
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.caption.weight(.semibold))
+                            .foregroundColor(.secondary)
+                    }
                 }
             }
+            .buttonStyle(.plain)
         }
         .padding(.vertical, 4)
     }
