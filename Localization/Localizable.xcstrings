@@ -3733,6 +3733,86 @@
         }
       }
     },
+    "Fill next time about %@ U." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Befülle künftig etwa %@ IE."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vul voortaan zo'n %@ E."
+          }
+        }
+      }
+    },
+    "Filled" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Befüllt"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gevuld"
+          }
+        }
+      }
+    },
+    "Firmware" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firmware"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firmware"
+          }
+        }
+      }
+    },
+    "How many units do you put in each Pod (85 – 200)?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie viele Einheiten füllst du in jeden Pod (85 – 200)?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoeveel eenheden doe je in elke Pod (85 – 200)?"
+          }
+        }
+      }
+    },
+    "Insulin" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insulin"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insuline"
+          }
+        }
+      }
+    },
     "None" : {
       "localizations" : {
         "de" : {
@@ -3745,6 +3825,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geen"
+          }
+        }
+      }
+    },
+    "Pod" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pod"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pod"
           }
         }
       }
@@ -3813,6 +3909,22 @@
         }
       }
     },
+    "Usage" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutzung"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik"
+          }
+        }
+      }
+    },
     "Warnings" : {
       "localizations" : {
         "de" : {
@@ -3825,6 +3937,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Waarschuwingen"
+          }
+        }
+      }
+    },
+    "You used %1$@ U in %2$@ hours. A full 80 hours (with the extension) needs about %3$@ U; with 20%% margin that is %4$@ U, about %5$@ U less waste per Pod." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast %1$@ IE in %2$@ Stunden verwendet. Für volle 80 Stunden (mit Verlängerung) sind das etwa %3$@ IE; mit 20 %% Reserve %4$@ IE. So verwirfst du pro Pod etwa %5$@ IE weniger."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je gebruikte %1$@ E in %2$@ uur. Voor een volle 80 uur (incl. verlenging) is dat zo'n %3$@ E; met 20%% marge kom je op %4$@ E. Zo gooi je per Pod ongeveer %5$@ E minder weg."
+          }
+        }
+      }
+    },
+    "Your fill matches your use." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Befüllung passt zu deinem Verbrauch."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je vulling past goed bij je verbruik."
           }
         }
       }
@@ -3845,6 +3989,22 @@
         }
       }
     },
+    "left when removed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "beim Entfernen übrig"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "over bij afkoppelen"
+          }
+        }
+      }
+    },
     "min" : {
       "localizations" : {
         "de" : {
@@ -3857,6 +4017,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "min"
+          }
+        }
+      }
+    },
+    "still in the Pod" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "noch im Pod"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nog in de Pod"
+          }
+        }
+      }
+    },
+    "used" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "verwendet"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "gebruikt"
           }
         }
       }
