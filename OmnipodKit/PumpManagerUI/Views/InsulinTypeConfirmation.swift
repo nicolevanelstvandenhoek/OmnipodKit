@@ -36,13 +36,16 @@ struct InsulinTypeConfirmation: View {
     var body: some View {
         VStack {
             List {
-                Section {
-                    Text(LocalizedString("Select the type of insulin that you will be using in this pod.", comment: "Title text for insulin type confirmation page"))
+                Group {
+                    Section {
+                        Text(LocalizedString("Select the type of insulin that you will be using in this pod.", comment: "Title text for insulin type confirmation page"))
+                    }
+                    Section {
+                        InsulinTypeChooser(insulinType: $insulinType, supportedInsulinTypes: supportedInsulinTypes)
+                    }
+                    .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
                 }
-                Section {
-                    InsulinTypeChooser(insulinType: $insulinType, supportedInsulinTypes: supportedInsulinTypes)
-                }
-                .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
+                .elaraRows()
             }
             .insetGroupedListStyle()
             

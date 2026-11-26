@@ -37,38 +37,42 @@ struct PodKeepAliveView: View {
     var content: some View {
         VStack {
             List {
-                Section {
-                    VStack(alignment: .center, spacing: 4) {
-                        FrameworkLocalText("Pod keep alive options to issue background status requests to minimize pod disconnects. Should no longer be needed for any iPhone and pod combination.", comment: "Summary of the Pod Keep Alive concept")
-                            .font(.body)
-                            .foregroundColor(.primary)
-                    }
-                }
-
-                Section {
-                    /// Skip displaying internal only Pod Keep Alives modes without a description
-                    ForEach(PodKeepAlive.allCases.filter { !$0.description.isEmpty }, id: \.self) { preference in
-                        HStack {
-                            CheckmarkListItem(
-                                title: Text(preference.title),
-                                description: Text(preference.description),
-                                isSelected: Binding(
-                                    /// Checkmark on match which includes the internal .whenOpen matching .disabled
-                                    get: { self.preference == preference ||
-                                        (self.preference == .whenOpen && preference == .disabled) },
-                                    set: { isSelected in
-                                        if isSelected {
-                                            self.preference = preference
-                                        }
-                                    }
-                                )
-                            )
+                Group {
+                    Section {
+                        VStack(alignment: .center, spacing: 4) {
+                            FrameworkLocalText("Pod keep alive options to issue background status requests to minimize pod disconnects. Should no longer be needed for any iPhone and pod combination.", comment: "Summary of the Pod Keep Alive concept")
+                                .font(.body)
+                                .foregroundColor(.primary)
                         }
-                        .padding(.vertical, 10)
                     }
+
+                    Section {
+                        /// Skip displaying internal only Pod Keep Alives modes without a description
+                        ForEach(PodKeepAlive.allCases.filter { !$0.description.isEmpty }, id: \.self) { preference in
+                            HStack {
+                                CheckmarkListItem(
+                                    title: Text(preference.title),
+                                    description: Text(preference.description),
+                                    isSelected: Binding(
+                                        /// Checkmark on match which includes the internal .whenOpen matching .disabled
+                                        get: { self.preference == preference ||
+                                            (self.preference == .whenOpen && preference == .disabled) },
+                                        set: { isSelected in
+                                            if isSelected {
+                                                self.preference = preference
+                                            }
+                                        }
+                                    )
+                                )
+                            }
+                            .padding(.vertical, 10)
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
                 }
-                .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
+                .elaraRows()
             }
+            .elaraListBackground()
             VStack {
                 Button(action: {
                     onChange?(preference)

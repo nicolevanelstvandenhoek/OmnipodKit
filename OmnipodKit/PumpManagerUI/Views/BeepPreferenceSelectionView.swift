@@ -39,32 +39,36 @@ struct BeepPreferenceSelectionView: View {
     var content: some View {
         VStack {
             List {
-                Section {
-                    Text(LocalizedString("Confidence reminders are beeps from the Pod which can be used to acknowledge selected commands when the Pod is not silenced.", comment: "Help text for BeepPreferenceSelectionView")).fixedSize(horizontal: false, vertical: true)
-                        .padding(.vertical, 10)
-                }
-
-                Section {
-                    ForEach(BeepPreference.allCases, id: \.self) { preference in
-                        HStack {
-                            CheckmarkListItem(
-                                title: Text(preference.title),
-                                description: Text(preference.description),
-                                isSelected: Binding(
-                                    get: { self.preference == preference },
-                                    set: { isSelected in
-                                        if isSelected {
-                                            self.preference = preference
-                                        }
-                                    }
-                                )
-                            )
-                        }
-                        .padding(.vertical, 10)
+                Group {
+                    Section {
+                        Text(LocalizedString("Confidence reminders are beeps from the Pod which can be used to acknowledge selected commands when the Pod is not silenced.", comment: "Help text for BeepPreferenceSelectionView")).fixedSize(horizontal: false, vertical: true)
+                            .padding(.vertical, 10)
                     }
+
+                    Section {
+                        ForEach(BeepPreference.allCases, id: \.self) { preference in
+                            HStack {
+                                CheckmarkListItem(
+                                    title: Text(preference.title),
+                                    description: Text(preference.description),
+                                    isSelected: Binding(
+                                        get: { self.preference == preference },
+                                        set: { isSelected in
+                                            if isSelected {
+                                                self.preference = preference
+                                            }
+                                        }
+                                    )
+                                )
+                            }
+                            .padding(.vertical, 10)
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
                 }
-                .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
+                .elaraRows()
             }
+            .elaraListBackground()
             VStack {
                 Button(action: {
                     saving = true

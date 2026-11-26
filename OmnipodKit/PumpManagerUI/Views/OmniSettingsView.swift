@@ -511,427 +511,212 @@ struct OmniSettingsView: View  {
     var body: some View {
         List {
             Group {
-            Section() {
-                if isElara {
-                    elaraPodCard
-                    if let faultAction = viewModel.recoveryText {
-                        Text(faultAction)
-                            .font(Font.footnote.weight(.semibold))
-                            .fixedSize(horizontal: false, vertical: true)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                } else {
-                VStack(alignment: .trailing) {
-                    Button(action: {
-                        sendingTestBeepsCommand = true
-                        Task { @MainActor in
-                            defer {
-                                // Executed after playTestBeeps() returns or throws
-                                sendingTestBeepsCommand = false
-                            }
-                            try? await viewModel.playTestBeeps()
-                            // No errors are displayed when using the sound icon to play test beeps.
-                            // Pod Diagnostics->Play Test Beeps will play beeps & display any errors.
+                Group {
+                Section() {
+                    if isElara {
+                        elaraPodCard
+                        if let faultAction = viewModel.recoveryText {
+                            Text(faultAction)
+                                .font(Font.footnote.weight(.semibold))
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
-                    }) {
-                        Image(systemName: "speaker.wave.2.circle")
-                            .imageScale(.large)
-                            .foregroundColor(viewModel.hasConnection ? .accentColor : .secondary)
-                            .padding(.top,5)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .accessibilityLabel(LocalizedString("Play Test Beeps", comment: "Accessibility label for the button that plays test beeps"))
-                    // Not gated on hasConnection. That var means different things by pod type — the
-                    // pod link for BLE pods, whether ANY RileyLink is connected (independent of pod
-                    // availability) for Eros; see OmniPumpManager.hasConnection. In neither case does
-                    // "not connected right now" mean the command can't run: playTestBeeps goes through
-                    // the normal command path, which acquires the link itself. The icon still greys out
-                    // to show there is no live link, but the button stays tappable, so a beep can be
-                    // used to check whether the pod is actually reachable. Every other action on this
-                    // screen gates on podOk rather than on connectivity.
-                    .disabled(sendingTestBeepsCommand)
-
-                    headerImage
-
-                    lifecycleProgress
-                    
-                    HStack(alignment: .top) {
-                        deliveryStatus
-                        Spacer()
-                        reservoirStatus
-                    }
-                    if let faultAction = viewModel.recoveryText {
-                        Divider()
-                        Text(faultAction)
-                            .font(Font.footnote.weight(.semibold))
-                            .fixedSize(horizontal: false, vertical: true)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                }
-                }
-                if let notice = viewModel.notice {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(notice.title)
-                            .font(Font.subheadline.weight(.bold))
-                        Text(notice.description)
-                            .font(Font.footnote.weight(.semibold))
-                    }.padding(.vertical, 8)
-                }
-            }
-
-            // Persistent advisory for InPlay-variant pods on affected iPhone models (iPhone 16
-            // family / iPhone 17e): connection establishment can stall and is retried
-            // automatically, so slower-than-normal connects are expected. Tap for details.
-            if viewModel.connectionSlownessExpected {
-                Section {
-                    NavigationLink(destination: InPlayConnectionInfoView()) {
-                        HStack(spacing: 10) {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundColor(.orange)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(LocalizedString("Slower Connections Expected", comment: "Title of InPlay connection notice row"))
-                                    .font(Font.subheadline.weight(.semibold))
-                                Text(LocalizedString("This pod and phone combination can be slow to connect.", comment: "Subtitle of InPlay connection notice row"))
-                                    .font(.footnote)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Advisory: a host requested pump-provided background heartbeats. On these combos the
-            // normal (StartDelay) heartbeat probe can't be used, so wakes come from link drops
-            // instead — workable, but less regular than on unaffected pods.
-            if viewModel.bleHeartbeatDegraded {
-                Section {
-                    NavigationLink(destination: InPlayConnectionInfoView()) {
-                        HStack(spacing: 10) {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundColor(.orange)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(LocalizedString("Reduced Background Wake-Ups", comment: "Title of BLE heartbeat degraded notice row"))
-                                    .font(Font.subheadline.weight(.semibold))
-                                Text(LocalizedString("Background wake-ups from the pod are less frequent on this pod and phone combination.", comment: "Subtitle of BLE heartbeat degraded notice row"))
-                                    .font(.footnote)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                    }
-                }
-            }
-
-            let lifeState = self.viewModel.lifeState
-            Section(header: SectionHeader(label: LocalizedString("Actions", comment: "Section header for Actions section"))) {
-                // If need to pair a pod, display this as the only action
-                if lifeState.nextPodLifecycleAction == .pairAndPrime {
-                    Section() {
+                    } else {
+                    VStack(alignment: .trailing) {
                         Button(action: {
-                            if self.viewModel.podType == unknownOmnipodType {
-                                self.viewModel.navigateTo?(.selectPodType)
-                            } else if self.viewModel.podType.isO5 &&
-                                !O5CertificateStore.contains(self.viewModel.controllerId)
-                            {
-                                if O5CertificateStore.isEmpty {
-                                    // No longer have any O5 Certificates,
-                                    // navigate to O5 Setup to download one.
-                                    self.viewModel.navigateTo?(.o5KeySetup)
-                                } else {
-                                    // Simply refresh to pick up another certificate
-                                    self.viewModel.refreshO5IdsFromCertStore()
+                            sendingTestBeepsCommand = true
+                            Task { @MainActor in
+                                defer {
+                                    // Executed after playTestBeeps() returns or throws
+                                    sendingTestBeepsCommand = false
                                 }
-                            } else {
-                                self.viewModel.navigateTo?(.pairAndPrime)
+                                try? await viewModel.playTestBeeps()
+                                // No errors are displayed when using the sound icon to play test beeps.
+                                // Pod Diagnostics->Play Test Beeps will play beeps & display any errors.
                             }
                         }) {
-                            Text(lifeState.nextPodLifecycleActionDescription)
-                                .foregroundColor(lifeState.nextPodLifecycleActionColor)
+                            Image(systemName: "speaker.wave.2.circle")
+                                .imageScale(.large)
+                                .foregroundColor(viewModel.hasConnection ? .accentColor : .secondary)
+                                .padding(.top,5)
                         }
-                    }
-                } else {
-                    suspendResumeRow()
-                        .disabled(!self.viewModel.podOk)
-                    if self.viewModel.podOk, case .suspended(let suspendDate) = self.viewModel.basalDeliveryState {
-                        HStack {
-                            FrameworkLocalText("Suspended At", comment: "Label for suspended at time")
+                        .buttonStyle(PlainButtonStyle())
+                        .accessibilityLabel(LocalizedString("Play Test Beeps", comment: "Accessibility label for the button that plays test beeps"))
+                        // Not gated on hasConnection. That var means different things by pod type — the
+                        // pod link for BLE pods, whether ANY RileyLink is connected (independent of pod
+                        // availability) for Eros; see OmniPumpManager.hasConnection. In neither case does
+                        // "not connected right now" mean the command can't run: playTestBeeps goes through
+                        // the normal command path, which acquires the link itself. The icon still greys out
+                        // to show there is no live link, but the button stays tappable, so a beep can be
+                        // used to check whether the pod is actually reachable. Every other action on this
+                        // screen gates on podOk rather than on connectivity.
+                        .disabled(sendingTestBeepsCommand)
+
+                        headerImage
+
+                        lifecycleProgress
+                    
+                        HStack(alignment: .top) {
+                            deliveryStatus
                             Spacer()
-                            Text(self.viewModel.timeFormatter.string(from: suspendDate))
-                                .foregroundColor(Color.secondary)
+                            reservoirStatus
+                        }
+                        if let faultAction = viewModel.recoveryText {
+                            Divider()
+                            Text(faultAction)
+                                .font(Font.footnote.weight(.semibold))
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
-                }
-            }
-            .elaraTightSection(isElara)
-
-            if lifeState.nextPodLifecycleAction == .deactivate {
-                Section() {
-                    if let manualTempRemaining = self.viewModel.manualBasalTimeRemaining, let remainingText = self.viewModel.timeRemainingFormatter.string(from: manualTempRemaining) {
-                        HStack {
-                            if cancelingTempBasal {
-                                ProgressView()
-                                    .padding(.trailing)
-                            } else {
-                                Image(systemName: "exclamationmark.circle.fill")
-                                    .font(.system(size: 22))
-                                    .foregroundColor(guidanceColors.warning)
-                                    .accessibilityHidden(true)
-                            }
-                            Button(action: {
-                                self.cancelManualBasal()
-                            }) {
-                                FrameworkLocalText("Cancel Manual Basal", comment: "Button title to cancel manual basal")
-                            }
-                        }
-                        HStack {
-                            FrameworkLocalText("Remaining", comment: "Label for remaining time of manual basal")
-                            Spacer()
-                            Text(remainingText)
-                                .foregroundColor(.secondary)
-                        }
-                    } else {
-                        manualTempBasalRow
+                    }
+                    if let notice = viewModel.notice {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(notice.title)
+                                .font(Font.subheadline.weight(.bold))
+                            Text(notice.description)
+                                .font(Font.footnote.weight(.semibold))
+                        }.padding(.vertical, 8)
                     }
                 }
-                .disabled(cancelingTempBasal || !self.viewModel.podOk)
-                .elaraTightSection(isElara)
 
-                Section() {
-                    Button(action: {
-                        self.viewModel.navigateTo?(.deactivate)
-                    }) {
-                        OmniElara.actionLabel(
-                            Text(lifeState.nextPodLifecycleActionDescription)
-                                .foregroundColor(lifeState.nextPodLifecycleActionColor),
-                            systemImage: "xmark",
-                            color: lifeState.nextPodLifecycleActionColor
-                        )
-                    }
-                }
-                .elaraTightSection(isElara)
-            }
-
-            if self.viewModel.podType.isEros {
-                Section(header: HStack {
-                    FrameworkLocalText("Devices", comment: "Header for devices section of OmniSettingsView")
-                    Spacer()
-                    ProgressView()
-                }) {
-                    ForEach(rileyLinkListDataSource.devices, id: \.peripheralIdentifier) { device in
-                        Toggle(isOn: rileyLinkListDataSource.autoconnectBinding(for: device)) {
-                            HStack {
-                                Text(device.name ?? "Unknown")
-                                Spacer()
-                                if rileyLinkListDataSource.autoconnectBinding(for: device).wrappedValue {
-                                    if device.isConnected {
-                                        Text(formatRSSI(rssi:device.rssi)).foregroundColor(.secondary)
-                                    } else {
-                                        Image(systemName: "wifi.exclamationmark")
-                                            .imageScale(.large)
-                                            .foregroundColor(guidanceColors.warning)
-                                    }
+                // Persistent advisory for InPlay-variant pods on affected iPhone models (iPhone 16
+                // family / iPhone 17e): connection establishment can stall and is retried
+                // automatically, so slower-than-normal connects are expected. Tap for details.
+                if viewModel.connectionSlownessExpected {
+                    Section {
+                        NavigationLink(destination: InPlayConnectionInfoView()) {
+                            HStack(spacing: 10) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(.orange)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(LocalizedString("Slower Connections Expected", comment: "Title of InPlay connection notice row"))
+                                        .font(Font.subheadline.weight(.semibold))
+                                    Text(LocalizedString("This pod and phone combination can be slow to connect.", comment: "Subtitle of InPlay connection notice row"))
+                                        .font(.footnote)
+                                        .foregroundColor(.secondary)
                                 }
                             }
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                handleRileyLinkSelection(device)
+                        }
+                    }
+                }
+
+                // Advisory: a host requested pump-provided background heartbeats. On these combos the
+                // normal (StartDelay) heartbeat probe can't be used, so wakes come from link drops
+                // instead — workable, but less regular than on unaffected pods.
+                if viewModel.bleHeartbeatDegraded {
+                    Section {
+                        NavigationLink(destination: InPlayConnectionInfoView()) {
+                            HStack(spacing: 10) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(.orange)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(LocalizedString("Reduced Background Wake-Ups", comment: "Title of BLE heartbeat degraded notice row"))
+                                        .font(Font.subheadline.weight(.semibold))
+                                    Text(LocalizedString("Background wake-ups from the pod are less frequent on this pod and phone combination.", comment: "Subtitle of BLE heartbeat degraded notice row"))
+                                        .font(.footnote)
+                                        .foregroundColor(.secondary)
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            Section() {
-                HStack {
-                    FrameworkLocalText("Activation", comment: "Label for Activation row")
-                    Spacer()
-                    Text(self.viewModel.activatedAtString)
-                        .foregroundColor(Color.primary)
-                }
-
-                HStack {
-                    FrameworkLocalText("Expiration", comment: "Label for Expiration row")
-                    Spacer()
-                    Text(self.viewModel.expiresAtString)
-                        .foregroundColor(Color.primary)
-                }
-
-                HStack {
-                    if viewModel.podDetails?.fault != nil {
-                        FrameworkLocalText("Faulted", comment: "Label for Faulted row")
-                        Spacer()
-                        Text(self.viewModel.deliveryStoppedAtString)
-                            .foregroundColor(Color.primary)
+                let lifeState = self.viewModel.lifeState
+                Section(header: SectionHeader(label: LocalizedString("Actions", comment: "Section header for Actions section"))) {
+                    // If need to pair a pod, display this as the only action
+                    if lifeState.nextPodLifecycleAction == .pairAndPrime {
+                        Section() {
+                            Button(action: {
+                                if self.viewModel.podType == unknownOmnipodType {
+                                    self.viewModel.navigateTo?(.selectPodType)
+                                } else if self.viewModel.podType.isO5 &&
+                                    !O5CertificateStore.contains(self.viewModel.controllerId)
+                                {
+                                    if O5CertificateStore.isEmpty {
+                                        // No longer have any O5 Certificates,
+                                        // navigate to O5 Setup to download one.
+                                        self.viewModel.navigateTo?(.o5KeySetup)
+                                    } else {
+                                        // Simply refresh to pick up another certificate
+                                        self.viewModel.refreshO5IdsFromCertStore()
+                                    }
+                                } else {
+                                    self.viewModel.navigateTo?(.pairAndPrime)
+                                }
+                            }) {
+                                Text(lifeState.nextPodLifecycleActionDescription)
+                                    .foregroundColor(lifeState.nextPodLifecycleActionColor)
+                            }
+                        }
                     } else {
-                        FrameworkLocalText("No Delivery", comment: "Label for No Delivery row")
-                        Spacer()
-                        Text(self.viewModel.noDeliveryAtString)
-                            .foregroundColor(Color.primary)
+                        suspendResumeRow()
+                            .disabled(!self.viewModel.podOk)
+                        if self.viewModel.podOk, case .suspended(let suspendDate) = self.viewModel.basalDeliveryState {
+                            HStack {
+                                FrameworkLocalText("Suspended At", comment: "Label for suspended at time")
+                                Spacer()
+                                Text(self.viewModel.timeFormatter.string(from: suspendDate))
+                                    .foregroundColor(Color.secondary)
+                            }
+                        }
                     }
                 }
+                .elaraTightSection(isElara)
 
-                let localizedPodDetailsStr = LocalizedString("Pod Details", comment: "Text for Pod Details row and page")
-                if let podDetails = self.viewModel.podDetails {
-                    NavigationLink(destination: PodDetailsView(podDetails: podDetails,
-                                                               title: localizedPodDetailsStr))
-                    {
-                        Text(localizedPodDetailsStr)
-                            .foregroundColor(Color.primary)
-                    }
-                } else {
-                    HStack {
-                        Text(localizedPodDetailsStr)
-                        Spacer()
-                        FrameworkLocalText("—", comment: "Omnipod UI text")
-                            .foregroundColor(Color.secondary)
-                    }
-                }
-
-                let localizedPreviousPodDetailsStr = LocalizedString("Previous Pod", comment: "Text for Previous Pod row and page")
-                if let previousPodDetails = viewModel.previousPodDetails {
-                    NavigationLink(destination: PodDetailsView(podDetails: previousPodDetails,
-                                                               title: localizedPreviousPodDetailsStr))
-                    {
-                        Text(localizedPreviousPodDetailsStr)
-                            .foregroundColor(Color.primary)
-                    }
-                } else {
-                    HStack {
-                        Text(localizedPreviousPodDetailsStr)
-                        Spacer()
-                        FrameworkLocalText("—", comment: "Omnipod UI text")
-                            .foregroundColor(Color.secondary)
-                    }
-                }
-            }
-
-            Section(header: SectionHeader(label: LocalizedString("Configuration", comment: "Section header for configuration section")))
-            {
-                let reservoirLevel = viewModel.reservoirLevel?.rawValue ?? Pod.reservoirCapacity + Pod.pulseSize
-                NavigationLink(destination:
-                                NotificationSettingsView(
-                                    dateFormatter: self.viewModel.dateFormatter,
-                                    expirationReminderDefault: self.$viewModel.expirationReminderDefault,
-                                    scheduledReminderDate: self.viewModel.expirationReminderDate,
-                                    allowedScheduledReminderDates: self.viewModel.allowedScheduledReminderDates,
-                                    lowReservoirReminderDefaultValue: self.viewModel.defaultLowReservoirAlertValue,
-                                    lowReservoirReminderValue: self.viewModel.lowReservoirAlertValue,
-                                    reservoirLevel: reservoirLevel,
-                                    hasActivePod: !viewModel.noPod,
-                                    onSaveScheduledExpirationReminder: self.viewModel.saveScheduledExpirationReminder,
-                                    onSaveLowReservoir: self.viewModel.saveLowReservoirReminder,
-                                    onSaveLowReservoirDefault: self.viewModel.saveDefaultLowReservoirReminder)
-                               )
-                {
-                    FrameworkLocalText("Notification Settings", comment: "Text for Notification Settings disclosure row")
-                        .foregroundColor(Color.primary)
-                }
-
-                NavigationLink(destination: BeepPreferenceSelectionView(initialValue: viewModel.beepPreference, onSave: viewModel.setConfirmationBeeps)) {
-                    HStack {
-                        FrameworkLocalText("Confidence Reminders", comment: "Text for confidence reminders navigation link")
-                            .foregroundColor(Color.primary)
-                        Spacer()
-                        Text(viewModel.beepPreference.title)
-                            .foregroundColor(.secondary)
-                    }
-                }
-
-                NavigationLink(destination: SilencePodSelectionView(initialValue: viewModel.silencePodPreference,
-                                                                    initialSilenceTimeEndTime: viewModel.silencePodEnd,
-                                                                    onSave: viewModel.setSilencePod,
-                                                                    noSilentBeep: viewModel.noSilentBeep))
-                {
-                    HStack {
-                        /// If we have a silence pod end time, use an alternate row title and display this time.
-                        /// This time may be in the past if the pump manager hasn't yet disabled silence mode
-                        /// which will then callback to reset the silencePod & silencePodEnd ViewModel variables.
-                        if let endTime = viewModel.silencePodEnd {
-                            FrameworkLocalText("Silence Pod Ends", comment: "Text for Silence Pod Ends navigation link")
-                                .foregroundColor(Color.primary)
-                            Spacer()
-                            Text(viewModel.timeFormatter.string(from: endTime))
-                                .foregroundColor(.secondary)
+                if lifeState.nextPodLifecycleAction == .deactivate {
+                    Section() {
+                        if let manualTempRemaining = self.viewModel.manualBasalTimeRemaining, let remainingText = self.viewModel.timeRemainingFormatter.string(from: manualTempRemaining) {
+                            HStack {
+                                if cancelingTempBasal {
+                                    ProgressView()
+                                        .padding(.trailing)
+                                } else {
+                                    Image(systemName: "exclamationmark.circle.fill")
+                                        .font(.system(size: 22))
+                                        .foregroundColor(guidanceColors.warning)
+                                        .accessibilityHidden(true)
+                                }
+                                Button(action: {
+                                    self.cancelManualBasal()
+                                }) {
+                                    FrameworkLocalText("Cancel Manual Basal", comment: "Button title to cancel manual basal")
+                                }
+                            }
+                            HStack {
+                                FrameworkLocalText("Remaining", comment: "Label for remaining time of manual basal")
+                                Spacer()
+                                Text(remainingText)
+                                    .foregroundColor(.secondary)
+                            }
                         } else {
-                            FrameworkLocalText("Silence Pod", comment: "Text for Silence Pod navigation link")
-                                .foregroundColor(Color.primary)
-                            Spacer()
-                            Text(viewModel.silencePodPreference.title)
-                                .foregroundColor(.secondary)
+                            manualTempBasalRow
                         }
                     }
-                }
+                    .disabled(cancelingTempBasal || !self.viewModel.podOk)
+                    .elaraTightSection(isElara)
 
-                NavigationLink(destination: InsulinTypeSetting(initialValue: viewModel.insulinType, supportedInsulinTypes: supportedInsulinTypes, allowUnsetInsulinType: false, didChange: viewModel.didChangeInsulinType)) {
-                    HStack {
-                        FrameworkLocalText("Insulin Type", comment: "Text for insulin type navigation link")
-                            .foregroundColor(Color.primary)
-                        if let currentTitle = viewModel.insulinType?.brandName {
-                            Spacer()
-                            Text(currentTitle)
-                                .foregroundColor(.secondary)
+                    Section() {
+                        Button(action: {
+                            self.viewModel.navigateTo?(.deactivate)
+                        }) {
+                            OmniElara.actionLabel(
+                                Text(lifeState.nextPodLifecycleActionDescription)
+                                    .foregroundColor(lifeState.nextPodLifecycleActionColor),
+                                systemImage: "xmark",
+                                color: lifeState.nextPodLifecycleActionColor
+                            )
                         }
                     }
+                    .elaraTightSection(isElara)
                 }
-            }
 
-            Section() {
-                HStack {
-                    FrameworkLocalText("Pump Time", comment: "The title of the command to change pump time zone")
-                    Spacer()
-                    if viewModel.isClockOffset {
-                        Image(systemName: "clock.fill")
-                            .foregroundColor(guidanceColors.warning)
-                    }
-                    TimeView(timeZone: viewModel.timeZone)
-                        .foregroundColor( viewModel.isClockOffset ? guidanceColors.warning : nil)
-                }
-                if viewModel.synchronizingTime {
-                    HStack {
-                        FrameworkLocalText("Adjusting Pump Time...", comment: "Text indicating ongoing pump time synchronization")
-                            .foregroundColor(.secondary)
+                if self.viewModel.podType.isEros {
+                    Section(header: HStack {
+                        FrameworkLocalText("Devices", comment: "Header for devices section of OmniSettingsView")
                         Spacer()
-                        ActivityIndicator(isAnimating: .constant(true), style: .medium)
-                    }
-                } else if self.viewModel.timeZone != TimeZone.currentFixed {
-                    Button(action: {
-                        showSyncTimeOptions = true
+                        ProgressView()
                     }) {
-                        FrameworkLocalText("Sync to Current Time", comment: "The title of the command to change pump time zone")
-                    }
-                    .actionSheet(isPresented: $showSyncTimeOptions) {
-                        syncPumpTimeActionSheet
-                    }
-                }
-            }
-
-            Section() {
-                let localizedPodDiagnosticsStr = LocalizedString("Pod Diagnostics", comment: "Title for the Pod Diagnostic row and page")
-                NavigationLink(destination: PodDiagnosticsView(
-                    title: localizedPodDiagnosticsStr,
-                    diagnosticCommands: viewModel.diagnosticCommands,
-                    podOk: viewModel.podOk,
-                    noPod: viewModel.noPod))
-                {
-                    Text(localizedPodDiagnosticsStr)
-                        .foregroundColor(Color.primary)
-                }
-                if !self.viewModel.podType.isEros {
-                    let localizedPodKeepAliveStr = LocalizedString("Pod Keep Alive",
-                        comment: "Title for the pod keep alive row and page")
-                    NavigationLink(destination: PodKeepAliveView(title: localizedPodKeepAliveStr,
-                        initialValue: viewModel.podKeepAlivePreference,
-                        onChange: viewModel.setPodKeepAlive))
-                    {
-                        HStack {
-                            Text(localizedPodKeepAliveStr)
-                                .foregroundColor(Color.primary)
-                            Spacer()
-                            Text(viewModel.podKeepAlivePreference.displayTitle)
-                                .foregroundColor(Color.secondary)
-                        }
-                    }
-
-                    if viewModel.podKeepAlivePreference == .rileyLink {
                         ForEach(rileyLinkListDataSource.devices, id: \.peripheralIdentifier) { device in
                             Toggle(isOn: rileyLinkListDataSource.autoconnectBinding(for: device)) {
                                 HStack {
@@ -939,8 +724,7 @@ struct OmniSettingsView: View  {
                                     Spacer()
                                     if rileyLinkListDataSource.autoconnectBinding(for: device).wrappedValue {
                                         if device.isConnected {
-                                            Text(formatRSSI(rssi: device.rssi))
-                                                .foregroundColor(.secondary)
+                                            Text(formatRSSI(rssi:device.rssi)).foregroundColor(.secondary)
                                         } else {
                                             Image(systemName: "wifi.exclamationmark")
                                                 .imageScale(.large)
@@ -956,46 +740,266 @@ struct OmniSettingsView: View  {
                         }
                     }
                 }
-            }
 
-            Section() {
-                NavigationLink(destination: Omnipod5SupportView(
-                    podType: viewModel.podType,
-                    controllerId: viewModel.controllerId,
-                    hasActivePod: !viewModel.noPod,
-                    refreshO5IdsFromCertStore: viewModel.refreshO5IdsFromCertStore,
-                    onCertStoreChanged: { o5CertLoaded = !O5RegistrationData.isEmpty }))
-                {
-                    HStack(spacing: 12) {
-                        Image(systemName: o5CertLoaded ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
-                            .foregroundColor(o5CertLoaded ? .green : guidanceColors.warning)
-                        FrameworkLocalText("Omnipod 5 Support", comment: "Text for Omnipod 5 Support navigation link in OmniSettingsView")
+                Section() {
+                    HStack {
+                        FrameworkLocalText("Activation", comment: "Label for Activation row")
+                        Spacer()
+                        Text(self.viewModel.activatedAtString)
                             .foregroundColor(Color.primary)
                     }
-                }
-            }
 
+                    HStack {
+                        FrameworkLocalText("Expiration", comment: "Label for Expiration row")
+                        Spacer()
+                        Text(self.viewModel.expiresAtString)
+                            .foregroundColor(Color.primary)
+                    }
 
-            if self.viewModel.lifeState.allowsPumpManagerRemoval {
-                Section() {
-                    Button(action: {
-                        self.showingDeleteConfirmation = true
-                    }, label: {
-                        HStack {
+                    HStack {
+                        if viewModel.podDetails?.fault != nil {
+                            FrameworkLocalText("Faulted", comment: "Label for Faulted row")
                             Spacer()
-                            FrameworkLocalText("Switch to another pod or pump type", comment: "Label for the switch to another pod or pump type button")
-                                .foregroundColor(guidanceColors.critical)
+                            Text(self.viewModel.deliveryStoppedAtString)
+                                .foregroundColor(Color.primary)
+                        } else {
+                            FrameworkLocalText("No Delivery", comment: "Label for No Delivery row")
                             Spacer()
+                            Text(self.viewModel.noDeliveryAtString)
+                                .foregroundColor(Color.primary)
                         }
-                    })
-                    .actionSheet(isPresented: $showingDeleteConfirmation) {
-                        switchInsulinDeliveryDeviceActionSheet
+                    }
+
+                    let localizedPodDetailsStr = LocalizedString("Pod Details", comment: "Text for Pod Details row and page")
+                    if let podDetails = self.viewModel.podDetails {
+                        NavigationLink(destination: PodDetailsView(podDetails: podDetails,
+                                                                   title: localizedPodDetailsStr))
+                        {
+                            Text(localizedPodDetailsStr)
+                                .foregroundColor(Color.primary)
+                        }
+                    } else {
+                        HStack {
+                            Text(localizedPodDetailsStr)
+                            Spacer()
+                            FrameworkLocalText("—", comment: "Omnipod UI text")
+                                .foregroundColor(Color.secondary)
+                        }
+                    }
+
+                    let localizedPreviousPodDetailsStr = LocalizedString("Previous Pod", comment: "Text for Previous Pod row and page")
+                    if let previousPodDetails = viewModel.previousPodDetails {
+                        NavigationLink(destination: PodDetailsView(podDetails: previousPodDetails,
+                                                                   title: localizedPreviousPodDetailsStr))
+                        {
+                            Text(localizedPreviousPodDetailsStr)
+                                .foregroundColor(Color.primary)
+                        }
+                    } else {
+                        HStack {
+                            Text(localizedPreviousPodDetailsStr)
+                            Spacer()
+                            FrameworkLocalText("—", comment: "Omnipod UI text")
+                                .foregroundColor(Color.secondary)
+                        }
                     }
                 }
+
+                Section(header: SectionHeader(label: LocalizedString("Configuration", comment: "Section header for configuration section")))
+                {
+                    let reservoirLevel = viewModel.reservoirLevel?.rawValue ?? Pod.reservoirCapacity + Pod.pulseSize
+                    NavigationLink(destination:
+                                    NotificationSettingsView(
+                                        dateFormatter: self.viewModel.dateFormatter,
+                                        expirationReminderDefault: self.$viewModel.expirationReminderDefault,
+                                        scheduledReminderDate: self.viewModel.expirationReminderDate,
+                                        allowedScheduledReminderDates: self.viewModel.allowedScheduledReminderDates,
+                                        lowReservoirReminderDefaultValue: self.viewModel.defaultLowReservoirAlertValue,
+                                        lowReservoirReminderValue: self.viewModel.lowReservoirAlertValue,
+                                        reservoirLevel: reservoirLevel,
+                                        hasActivePod: !viewModel.noPod,
+                                        onSaveScheduledExpirationReminder: self.viewModel.saveScheduledExpirationReminder,
+                                        onSaveLowReservoir: self.viewModel.saveLowReservoirReminder,
+                                        onSaveLowReservoirDefault: self.viewModel.saveDefaultLowReservoirReminder)
+                                   )
+                    {
+                        FrameworkLocalText("Notification Settings", comment: "Text for Notification Settings disclosure row")
+                            .foregroundColor(Color.primary)
+                    }
+
+                    NavigationLink(destination: BeepPreferenceSelectionView(initialValue: viewModel.beepPreference, onSave: viewModel.setConfirmationBeeps)) {
+                        HStack {
+                            FrameworkLocalText("Confidence Reminders", comment: "Text for confidence reminders navigation link")
+                                .foregroundColor(Color.primary)
+                            Spacer()
+                            Text(viewModel.beepPreference.title)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+
+                    NavigationLink(destination: SilencePodSelectionView(initialValue: viewModel.silencePodPreference,
+                                                                        initialSilenceTimeEndTime: viewModel.silencePodEnd,
+                                                                        onSave: viewModel.setSilencePod,
+                                                                        noSilentBeep: viewModel.noSilentBeep))
+                    {
+                        HStack {
+                            /// If we have a silence pod end time, use an alternate row title and display this time.
+                            /// This time may be in the past if the pump manager hasn't yet disabled silence mode
+                            /// which will then callback to reset the silencePod & silencePodEnd ViewModel variables.
+                            if let endTime = viewModel.silencePodEnd {
+                                FrameworkLocalText("Silence Pod Ends", comment: "Text for Silence Pod Ends navigation link")
+                                    .foregroundColor(Color.primary)
+                                Spacer()
+                                Text(viewModel.timeFormatter.string(from: endTime))
+                                    .foregroundColor(.secondary)
+                            } else {
+                                FrameworkLocalText("Silence Pod", comment: "Text for Silence Pod navigation link")
+                                    .foregroundColor(Color.primary)
+                                Spacer()
+                                Text(viewModel.silencePodPreference.title)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+
+                    NavigationLink(destination: InsulinTypeSetting(initialValue: viewModel.insulinType, supportedInsulinTypes: supportedInsulinTypes, allowUnsetInsulinType: false, didChange: viewModel.didChangeInsulinType)) {
+                        HStack {
+                            FrameworkLocalText("Insulin Type", comment: "Text for insulin type navigation link")
+                                .foregroundColor(Color.primary)
+                            if let currentTitle = viewModel.insulinType?.brandName {
+                                Spacer()
+                                Text(currentTitle)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                }
+
+                Section() {
+                    HStack {
+                        FrameworkLocalText("Pump Time", comment: "The title of the command to change pump time zone")
+                        Spacer()
+                        if viewModel.isClockOffset {
+                            Image(systemName: "clock.fill")
+                                .foregroundColor(guidanceColors.warning)
+                        }
+                        TimeView(timeZone: viewModel.timeZone)
+                            .foregroundColor( viewModel.isClockOffset ? guidanceColors.warning : nil)
+                    }
+                    if viewModel.synchronizingTime {
+                        HStack {
+                            FrameworkLocalText("Adjusting Pump Time...", comment: "Text indicating ongoing pump time synchronization")
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            ActivityIndicator(isAnimating: .constant(true), style: .medium)
+                        }
+                    } else if self.viewModel.timeZone != TimeZone.currentFixed {
+                        Button(action: {
+                            showSyncTimeOptions = true
+                        }) {
+                            FrameworkLocalText("Sync to Current Time", comment: "The title of the command to change pump time zone")
+                        }
+                        .actionSheet(isPresented: $showSyncTimeOptions) {
+                            syncPumpTimeActionSheet
+                        }
+                    }
+                }
+
+                Section() {
+                    let localizedPodDiagnosticsStr = LocalizedString("Pod Diagnostics", comment: "Title for the Pod Diagnostic row and page")
+                    NavigationLink(destination: PodDiagnosticsView(
+                        title: localizedPodDiagnosticsStr,
+                        diagnosticCommands: viewModel.diagnosticCommands,
+                        podOk: viewModel.podOk,
+                        noPod: viewModel.noPod))
+                    {
+                        Text(localizedPodDiagnosticsStr)
+                            .foregroundColor(Color.primary)
+                    }
+                    if !self.viewModel.podType.isEros {
+                        let localizedPodKeepAliveStr = LocalizedString("Pod Keep Alive",
+                            comment: "Title for the pod keep alive row and page")
+                        NavigationLink(destination: PodKeepAliveView(title: localizedPodKeepAliveStr,
+                            initialValue: viewModel.podKeepAlivePreference,
+                            onChange: viewModel.setPodKeepAlive))
+                        {
+                            HStack {
+                                Text(localizedPodKeepAliveStr)
+                                    .foregroundColor(Color.primary)
+                                Spacer()
+                                Text(viewModel.podKeepAlivePreference.displayTitle)
+                                    .foregroundColor(Color.secondary)
+                            }
+                        }
+
+                        if viewModel.podKeepAlivePreference == .rileyLink {
+                            ForEach(rileyLinkListDataSource.devices, id: \.peripheralIdentifier) { device in
+                                Toggle(isOn: rileyLinkListDataSource.autoconnectBinding(for: device)) {
+                                    HStack {
+                                        Text(device.name ?? "Unknown")
+                                        Spacer()
+                                        if rileyLinkListDataSource.autoconnectBinding(for: device).wrappedValue {
+                                            if device.isConnected {
+                                                Text(formatRSSI(rssi: device.rssi))
+                                                    .foregroundColor(.secondary)
+                                            } else {
+                                                Image(systemName: "wifi.exclamationmark")
+                                                    .imageScale(.large)
+                                                    .foregroundColor(guidanceColors.warning)
+                                            }
+                                        }
+                                    }
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
+                                        handleRileyLinkSelection(device)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Section() {
+                    NavigationLink(destination: Omnipod5SupportView(
+                        podType: viewModel.podType,
+                        controllerId: viewModel.controllerId,
+                        hasActivePod: !viewModel.noPod,
+                        refreshO5IdsFromCertStore: viewModel.refreshO5IdsFromCertStore,
+                        onCertStoreChanged: { o5CertLoaded = !O5RegistrationData.isEmpty }))
+                    {
+                        HStack(spacing: 12) {
+                            Image(systemName: o5CertLoaded ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+                                .foregroundColor(o5CertLoaded ? .green : guidanceColors.warning)
+                            FrameworkLocalText("Omnipod 5 Support", comment: "Text for Omnipod 5 Support navigation link in OmniSettingsView")
+                                .foregroundColor(Color.primary)
+                        }
+                    }
+                }
+
+
+                if self.viewModel.lifeState.allowsPumpManagerRemoval {
+                    Section() {
+                        Button(action: {
+                            self.showingDeleteConfirmation = true
+                        }, label: {
+                            HStack {
+                                Spacer()
+                                FrameworkLocalText("Switch to another pod or pump type", comment: "Label for the switch to another pod or pump type button")
+                                    .foregroundColor(guidanceColors.critical)
+                                Spacer()
+                            }
+                        })
+                        .actionSheet(isPresented: $showingDeleteConfirmation) {
+                            switchInsulinDeliveryDeviceActionSheet
+                        }
+                    }
+                }
+                }
+                .listRowBackground(isElara ? OmniElara.cardFill(colorScheme) : nil)
             }
-            }
-            .listRowBackground(isElara ? OmniElara.cardFill(colorScheme) : nil)
+            .elaraRows()
         }
+        .elaraListBackground()
         .scrollContentBackground(isElara ? .hidden : .automatic)
         .background(isElara ? AnyView(OmniElara.background(colorScheme).ignoresSafeArea()) : AnyView(EmptyView()))
         .onAppear {
@@ -1178,7 +1182,7 @@ enum OmniElara {
     static let muted = Color(red: 143 / 255, green: 148 / 255, blue: 156 / 255)
 
     static func cardFill(_ scheme: ColorScheme) -> Color {
-        scheme == .dark ? Color.white.opacity(0.06) : Color.white.opacity(0.8)
+        scheme == .dark ? Color.white.opacity(0.05) : Color.white.opacity(0.72)
     }
 
     static func background(_ scheme: ColorScheme) -> LinearGradient {

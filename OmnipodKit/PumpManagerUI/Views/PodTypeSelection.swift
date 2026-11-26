@@ -38,13 +38,16 @@ struct PodTypeSelection: View {
     var body: some View {
         VStack(alignment: .leading) {
             List {
-                Section {
-                    Text(String(format: LocalizedString("Select the particular Omnipod Pod type to use with %1$@. Be sure to select the correct Pod type or %2$@ will not be able to communicate with it.", comment: "Help text for Omnipod Pod type selection (1: appName) (2: appName)"), self.appName, self.appName))
+                Group {
+                    Section {
+                        Text(String(format: LocalizedString("Select the particular Omnipod Pod type to use with %1$@. Be sure to select the correct Pod type or %2$@ will not be able to communicate with it.", comment: "Help text for Omnipod Pod type selection (1: appName) (2: appName)"), self.appName, self.appName))
+                    }
+                    Section {
+                        PodTypeChooser(podType: $podType, o5NotAvailable: o5NotAvailable)
+                    }
+                    .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
                 }
-                Section {
-                    PodTypeChooser(podType: $podType, o5NotAvailable: o5NotAvailable)
-                }
-                .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
+                .elaraRows()
             }
             .insetGroupedListStyle()
 

@@ -8,6 +8,7 @@
 //
 
 import SwiftUI
+import LoopKitUI
 import LoopKit
 
 
@@ -30,14 +31,18 @@ struct ReadPodInfoView: View {
     var body: some View {
         VStack {
             List {
-                Section {
-                    let myFont = Font
-                        .system(size: 12)
-                        .monospaced()
-                    Text(self.displayString)
-                        .font(myFont)
+                Group {
+                    Section {
+                        let myFont = Font
+                            .system(size: 12)
+                            .monospaced()
+                        Text(self.displayString)
+                            .font(myFont)
+                    }
                 }
+                .elaraRows()
             }
+            .elaraListBackground()
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {

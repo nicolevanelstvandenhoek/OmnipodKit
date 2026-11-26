@@ -27,20 +27,23 @@ struct O5KeySetupView: View {
     var body: some View {
         VStack(alignment: .leading) {
             List {
-                Section {
-                    if o5KeypairsNotAvailable {
-                        Text(LocalizedString("Tap ‘Continue’ to download a certificate to be stored in order to pair with Omnipod 5 Pods. This is a one-time action that requires Internet access.", comment: "Description when O5 keypairs are not available"))
-                        .padding(.vertical, 4)
-                    } else {
-                        HStack(spacing: 12) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.green)
-                                .font(.title2)
-                            Text(LocalizedString("Ready to pair with an Omnipod 5 Pod.", comment: "Description when O5 keypairs are available"))
+                Group {
+                    Section {
+                        if o5KeypairsNotAvailable {
+                            Text(LocalizedString("Tap ‘Continue’ to download a certificate to be stored in order to pair with Omnipod 5 Pods. This is a one-time action that requires Internet access.", comment: "Description when O5 keypairs are not available"))
+                            .padding(.vertical, 4)
+                        } else {
+                            HStack(spacing: 12) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                                    .font(.title2)
+                                Text(LocalizedString("Ready to pair with an Omnipod 5 Pod.", comment: "Description when O5 keypairs are available"))
+                            }
+                            .padding(.vertical, 4)
                         }
-                        .padding(.vertical, 4)
                     }
                 }
+                .elaraRows()
             }
             .insetGroupedListStyle()
 

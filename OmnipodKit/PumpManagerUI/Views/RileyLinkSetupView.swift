@@ -32,30 +32,34 @@ struct RileyLinkSetupView: View {
     var body: some View {
         VStack {
             List {
-                VStack {
-                    Image("RileyLink", bundle: Bundle(for: RileyLinkCell.self))
-                        .resizable()
-                        .foregroundColor(Color(imageTint))
-                        .aspectRatio(contentMode: ContentMode.fit)
-                    bodyText
-                        .foregroundColor(.secondary)
-                }
-                Section(header: HStack {
-                    FrameworkLocalText("Devices", comment: "Header for devices section of RileyLinkSetupView")
-                    Spacer()
-                    ProgressView()
-                }) {
-                    ForEach(dataSource.devices, id: \.peripheralIdentifier) { device in
-                        Toggle(isOn: dataSource.autoconnectBinding(for: device)) {
-                            HStack {
-                                Text(device.name ?? "Unknown")
-                                Spacer()
-                                Text(formatRSSI(rssi:device.rssi)).foregroundColor(.secondary)
+                Group {
+                    VStack {
+                        Image("RileyLink", bundle: Bundle(for: RileyLinkCell.self))
+                            .resizable()
+                            .foregroundColor(Color(imageTint))
+                            .aspectRatio(contentMode: ContentMode.fit)
+                        bodyText
+                            .foregroundColor(.secondary)
+                    }
+                    Section(header: HStack {
+                        FrameworkLocalText("Devices", comment: "Header for devices section of RileyLinkSetupView")
+                        Spacer()
+                        ProgressView()
+                    }) {
+                        ForEach(dataSource.devices, id: \.peripheralIdentifier) { device in
+                            Toggle(isOn: dataSource.autoconnectBinding(for: device)) {
+                                HStack {
+                                    Text(device.name ?? "Unknown")
+                                    Spacer()
+                                    Text(formatRSSI(rssi:device.rssi)).foregroundColor(.secondary)
+                                }
                             }
                         }
                     }
                 }
+                .elaraRows()
             }
+            .elaraListBackground()
             Spacer()
             continueButton
                 .padding([.bottom, .horizontal])

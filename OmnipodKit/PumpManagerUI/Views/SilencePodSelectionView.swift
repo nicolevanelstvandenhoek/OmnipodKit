@@ -62,54 +62,58 @@ struct SilencePodSelectionView: View {
                 LocalizedString("Silence Pod mode suppresses all Pod alert and confirmation reminder beeping.",
                                 comment: "Help text for Silence Pod view")
             List {
-                Section {
-                    if self.noSilentBeep {
-                        VStack(alignment: .center, spacing: 4) {
-                            FrameworkLocalText("⚠️Warning - Unable to silence Pod alerts with the firmware in this particular Pod!", comment: "Omnipod UI text")
+                Group {
+                    Section {
+                        if self.noSilentBeep {
+                            VStack(alignment: .center, spacing: 4) {
+                                FrameworkLocalText("⚠️Warning - Unable to silence Pod alerts with the firmware in this particular Pod!", comment: "Omnipod UI text")
+                                    .padding(.vertical, 10)
+                                    .font(.body)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.primary)
+                            }
+                        }
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(instructions)
                                 .padding(.vertical, 10)
                                 .font(.body)
-                                .fontWeight(.bold)
                                 .foregroundColor(.primary)
                         }
                     }
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(instructions)
-                            .padding(.vertical, 10)
-                            .font(.body)
-                            .foregroundColor(.primary)
-                    }
-                }
-                Section {
-                    ForEach(SilencePodPreference.allCases, id: \.self) { preference in
-                        HStack {
-                            CheckmarkListItem(
-                                title: Text(preference.title),
-                                description: Text(self.noSilentBeep ? preference.altDescription : preference.description),
-                                isSelected: Binding(
-                                    get: { self.preference == preference },
-                                    set: { isSelected in
-                                        if isSelected {
-                                            self.preference = preference
+                    Section {
+                        ForEach(SilencePodPreference.allCases, id: \.self) { preference in
+                            HStack {
+                                CheckmarkListItem(
+                                    title: Text(preference.title),
+                                    description: Text(self.noSilentBeep ? preference.altDescription : preference.description),
+                                    isSelected: Binding(
+                                        get: { self.preference == preference },
+                                        set: { isSelected in
+                                            if isSelected {
+                                                self.preference = preference
+                                            }
                                         }
-                                    }
+                                    )
                                 )
-                            )
+                            }
+                            .padding(.vertical, 4)
                         }
-                        .padding(.vertical, 4)
-                    }
-                    if self.preference == .enabled {
-                        Section {
-                            OptionalDatePicker(
-                                title: LocalizedString("Silence End", comment: "Silence End label"),
-                                footnote: LocalizedString("Silence Pod mode will remain in effect until Disabled or the Silence End time has been reached", comment: "Silence End time description"),
-                                selection: $endTimeValue
-                            )
+                        if self.preference == .enabled {
+                            Section {
+                                OptionalDatePicker(
+                                    title: LocalizedString("Silence End", comment: "Silence End label"),
+                                    footnote: LocalizedString("Silence Pod mode will remain in effect until Disabled or the Silence End time has been reached", comment: "Silence End time description"),
+                                    selection: $endTimeValue
+                                )
+                            }
                         }
                     }
+                    .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
                 }
-                .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
+                .elaraRows()
             }
+            .elaraListBackground()
             VStack {
                 Button(action: {
                     doSave(preference, endTimeValue, dismissOnSuccess: true)

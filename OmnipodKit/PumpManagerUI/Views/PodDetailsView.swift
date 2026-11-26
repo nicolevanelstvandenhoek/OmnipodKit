@@ -236,50 +236,54 @@ struct PodDetailsView: View {
     private var elaraBody: some View {
         List {
             Group {
-                if podDetails.totalDelivery != nil {
-                    Section(header: Text(LocalizedString("Insulin", comment: "Pod details section: insulin in the pod"))) {
-                        insulinCard
+                Group {
+                    if podDetails.totalDelivery != nil {
+                        Section(header: Text(LocalizedString("Insulin", comment: "Pod details section: insulin in the pod"))) {
+                            insulinCard
+                        }
                     }
+                    Section(header: Text(LocalizedString("Usage", comment: "Pod details section: use of the pod"))) {
+                        elaraRow("drop.fill", Color("Insulin"), LocalizedString("Total Delivery", comment: "description label for total delivery pod details row"), totalDeliveryText)
+                        elaraRow("timer", .orange, LocalizedString("Pod Hours", comment: "description label for pod hours pod details row"), podHoursText)
+                        if let activatedAt = podDetails.activatedAt {
+                            elaraRow("play.fill", Color("LoopGreen"), LocalizedString("Activation", comment: "description label for activation pod details row"), dateFormatter.string(from: activatedAt))
+                        }
+                        if let deliveryStoppedAt = podDetails.deliveryStoppedAt {
+                            elaraRow(
+                                podDetails.fault != nil ? "exclamationmark.triangle.fill" : "stop.fill",
+                                guidanceColors.critical,
+                                podDetails.fault != nil
+                                    ? LocalizedString("Faulted", comment: "description label for faulted pod details row")
+                                    : LocalizedString("Deactivation", comment: "description label for deactivation pod details row"),
+                                dateFormatter.string(from: deliveryStoppedAt)
+                            )
+                        } else {
+                            elaraRow("clock", .gray, LocalizedString("Last Status", comment: "description label for last status date pod details row"), lastStatusText)
+                        }
+                    }
+                    Section(header: Text(LocalizedString("Pod", comment: "Pod details section: the pod itself"))) {
+                        elaraRow("square", .gray, LocalizedString("Pod Type", comment: "description label for pod type pod details row"), String(describing: podDetails.podType.description))
+                        if let deviceName = podDetails.deviceName {
+                            elaraRow("antenna.radiowaves.left.and.right", .gray, LocalizedString("Device Name", comment: "description label for device name pod details row"), deviceName)
+                        }
+                        elaraRow("number", Color("LoopGreen"), LocalizedString("Lot", comment: "description label for lot pod details row"), lotText)
+                        if !podDetails.podType.isEros {
+                            elaraRow("number", .gray, LocalizedString("Lot Number", comment: "description label for lot number pod details row"), String(describing: podDetails.lotNumber))
+                        }
+                        elaraRow("number", .gray, LocalizedString("Sequence Number", comment: "description label for sequence number pod details row"), String(format: "%07d", podDetails.sequenceNumber))
+                        elaraRow("point.3.connected.trianglepath.dotted", .gray, LocalizedString("Address", comment: "description label for address pod details row"), String(format: "0x%08X", podDetails.address))
+                    }
+                    Section(header: Text(LocalizedString("Firmware", comment: "Pod details section: firmware versions"))) {
+                        elaraRow("gearshape.fill", .gray, LocalizedString("Firmware Version", comment: "description label for firmware version pod details row"), podDetails.firmwareVersion)
+                        elaraRow("dot.radiowaves.left.and.right", .blue, LocalizedString("BLE Firmware Version", comment: "description label for ble firmware version pod details row"), podDetails.bleFirmwareVersion)
+                    }
+                    faultSection
                 }
-                Section(header: Text(LocalizedString("Usage", comment: "Pod details section: use of the pod"))) {
-                    elaraRow("drop.fill", Color("Insulin"), LocalizedString("Total Delivery", comment: "description label for total delivery pod details row"), totalDeliveryText)
-                    elaraRow("timer", .orange, LocalizedString("Pod Hours", comment: "description label for pod hours pod details row"), podHoursText)
-                    if let activatedAt = podDetails.activatedAt {
-                        elaraRow("play.fill", Color("LoopGreen"), LocalizedString("Activation", comment: "description label for activation pod details row"), dateFormatter.string(from: activatedAt))
-                    }
-                    if let deliveryStoppedAt = podDetails.deliveryStoppedAt {
-                        elaraRow(
-                            podDetails.fault != nil ? "exclamationmark.triangle.fill" : "stop.fill",
-                            guidanceColors.critical,
-                            podDetails.fault != nil
-                                ? LocalizedString("Faulted", comment: "description label for faulted pod details row")
-                                : LocalizedString("Deactivation", comment: "description label for deactivation pod details row"),
-                            dateFormatter.string(from: deliveryStoppedAt)
-                        )
-                    } else {
-                        elaraRow("clock", .gray, LocalizedString("Last Status", comment: "description label for last status date pod details row"), lastStatusText)
-                    }
-                }
-                Section(header: Text(LocalizedString("Pod", comment: "Pod details section: the pod itself"))) {
-                    elaraRow("square", .gray, LocalizedString("Pod Type", comment: "description label for pod type pod details row"), String(describing: podDetails.podType.description))
-                    if let deviceName = podDetails.deviceName {
-                        elaraRow("antenna.radiowaves.left.and.right", .gray, LocalizedString("Device Name", comment: "description label for device name pod details row"), deviceName)
-                    }
-                    elaraRow("number", Color("LoopGreen"), LocalizedString("Lot", comment: "description label for lot pod details row"), lotText)
-                    if !podDetails.podType.isEros {
-                        elaraRow("number", .gray, LocalizedString("Lot Number", comment: "description label for lot number pod details row"), String(describing: podDetails.lotNumber))
-                    }
-                    elaraRow("number", .gray, LocalizedString("Sequence Number", comment: "description label for sequence number pod details row"), String(format: "%07d", podDetails.sequenceNumber))
-                    elaraRow("point.3.connected.trianglepath.dotted", .gray, LocalizedString("Address", comment: "description label for address pod details row"), String(format: "0x%08X", podDetails.address))
-                }
-                Section(header: Text(LocalizedString("Firmware", comment: "Pod details section: firmware versions"))) {
-                    elaraRow("gearshape.fill", .gray, LocalizedString("Firmware Version", comment: "description label for firmware version pod details row"), podDetails.firmwareVersion)
-                    elaraRow("dot.radiowaves.left.and.right", .blue, LocalizedString("BLE Firmware Version", comment: "description label for ble firmware version pod details row"), podDetails.bleFirmwareVersion)
-                }
-                faultSection
+                .listRowBackground(OmniElara.cardFill(colorScheme))
             }
-            .listRowBackground(OmniElara.cardFill(colorScheme))
+            .elaraRows()
         }
+        .elaraListBackground()
         .scrollContentBackground(.hidden)
         .background(OmniElara.background(colorScheme).ignoresSafeArea())
         .navigationTitle(title)
@@ -321,56 +325,60 @@ struct PodDetailsView: View {
 
     private var classicBody: some View {
         List {
-            row(LocalizedString("Pod Type", comment: "description label for pod type pod details row"), value: String(describing: podDetails.podType.description))
-            if let deviceName = podDetails.deviceName {
-                row(LocalizedString("Device Name", comment: "description label for device name pod details row"), value: deviceName)
-            }
-            row(LocalizedString("Address", comment: "description label for address pod details row"), value: String(format: "0x%08X", podDetails.address))
-            if podDetails.podType.isEros {
-                row(LocalizedString("Lot", comment: "description label for lot pod details row"),
-                    value: String(format: "L%05u", podDetails.lotNumber))
-            } else {
-                row(LocalizedString("Lot", comment: "description label for lot pod details row"),
-                    value: lotDecode(lot: podDetails.lotNumber).readableText)
-                row(LocalizedString("Lot Number", comment: "description label for lot number pod details row"),
-                    value: String(describing: podDetails.lotNumber))
-            }
-            row(LocalizedString("Sequence Number", comment: "description label for sequence number pod details row"), value: String(format: "%07d", podDetails.sequenceNumber))
-            row(LocalizedString("Firmware Version", comment: "description label for firmware version pod details row"), value: podDetails.firmwareVersion)
-            row(LocalizedString("BLE Firmware Version", comment: "description label for ble firmware version pod details row"), value: podDetails.bleFirmwareVersion)
-            row(LocalizedString("Total Delivery", comment: "description label for total delivery pod details row"), value: totalDeliveryText)
-            row(LocalizedString("Pod Hours", comment: "description label for pod hours pod details row"), value: podHoursText)
-            if let activatedAt = podDetails.activatedAt {
-                row(LocalizedString("Activation", comment: "description label for activation pod details row"), value: dateFormatter.string(from: activatedAt))
-            }
-            if let deliveryStoppedAt = podDetails.deliveryStoppedAt {
-                if podDetails.fault != nil {
-                    row(LocalizedString("Faulted", comment: "description label for faulted pod details row"), value: dateFormatter.string(from: deliveryStoppedAt))
-                } else {
-                    row(LocalizedString("Deactivation", comment: "description label for deactivation pod details row"), value: dateFormatter.string(from: deliveryStoppedAt))
+            Group {
+                row(LocalizedString("Pod Type", comment: "description label for pod type pod details row"), value: String(describing: podDetails.podType.description))
+                if let deviceName = podDetails.deviceName {
+                    row(LocalizedString("Device Name", comment: "description label for device name pod details row"), value: deviceName)
                 }
-            } else {
-                row(LocalizedString("Last Status", comment: "description label for last status date pod details row"), value: lastStatusText)
-            }
-            if let fault = podDetails.fault, let pdmRef = fault.pdmRef {
-                Section {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundColor(guidanceColors.critical)
-                            Text(LocalizedString("Pod Fault Details", comment: "description label for pod fault details"))
-                                .fontWeight(.semibold)
-                        }.padding(.vertical, 4)
-                        let faultCode = fault.faultEventCode
-                        Text(String(format: LocalizedString("Internal Pod fault code %1$@\n%2$@\nRef: %3$@\n",
-                                comment: "The format string for the pod fault info: (1: fault code) (2: fault description) (3: pdm ref string)"),
-                                String(format: "%03u", faultCode.rawValue), faultCode.faultDescription, pdmRef))
-                            .fixedSize(horizontal: false, vertical: true)
-                            .foregroundColor(.secondary)
+                row(LocalizedString("Address", comment: "description label for address pod details row"), value: String(format: "0x%08X", podDetails.address))
+                if podDetails.podType.isEros {
+                    row(LocalizedString("Lot", comment: "description label for lot pod details row"),
+                        value: String(format: "L%05u", podDetails.lotNumber))
+                } else {
+                    row(LocalizedString("Lot", comment: "description label for lot pod details row"),
+                        value: lotDecode(lot: podDetails.lotNumber).readableText)
+                    row(LocalizedString("Lot Number", comment: "description label for lot number pod details row"),
+                        value: String(describing: podDetails.lotNumber))
+                }
+                row(LocalizedString("Sequence Number", comment: "description label for sequence number pod details row"), value: String(format: "%07d", podDetails.sequenceNumber))
+                row(LocalizedString("Firmware Version", comment: "description label for firmware version pod details row"), value: podDetails.firmwareVersion)
+                row(LocalizedString("BLE Firmware Version", comment: "description label for ble firmware version pod details row"), value: podDetails.bleFirmwareVersion)
+                row(LocalizedString("Total Delivery", comment: "description label for total delivery pod details row"), value: totalDeliveryText)
+                row(LocalizedString("Pod Hours", comment: "description label for pod hours pod details row"), value: podHoursText)
+                if let activatedAt = podDetails.activatedAt {
+                    row(LocalizedString("Activation", comment: "description label for activation pod details row"), value: dateFormatter.string(from: activatedAt))
+                }
+                if let deliveryStoppedAt = podDetails.deliveryStoppedAt {
+                    if podDetails.fault != nil {
+                        row(LocalizedString("Faulted", comment: "description label for faulted pod details row"), value: dateFormatter.string(from: deliveryStoppedAt))
+                    } else {
+                        row(LocalizedString("Deactivation", comment: "description label for deactivation pod details row"), value: dateFormatter.string(from: deliveryStoppedAt))
+                    }
+                } else {
+                    row(LocalizedString("Last Status", comment: "description label for last status date pod details row"), value: lastStatusText)
+                }
+                if let fault = podDetails.fault, let pdmRef = fault.pdmRef {
+                    Section {
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(guidanceColors.critical)
+                                Text(LocalizedString("Pod Fault Details", comment: "description label for pod fault details"))
+                                    .fontWeight(.semibold)
+                            }.padding(.vertical, 4)
+                            let faultCode = fault.faultEventCode
+                            Text(String(format: LocalizedString("Internal Pod fault code %1$@\n%2$@\nRef: %3$@\n",
+                                    comment: "The format string for the pod fault info: (1: fault code) (2: fault description) (3: pdm ref string)"),
+                                    String(format: "%03u", faultCode.rawValue), faultCode.faultDescription, pdmRef))
+                                .fixedSize(horizontal: false, vertical: true)
+                                .foregroundColor(.secondary)
+                        }
                     }
                 }
             }
+            .elaraRows()
         }
+        .elaraListBackground()
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.automatic)
     }

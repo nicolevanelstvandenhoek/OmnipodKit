@@ -8,6 +8,7 @@
 //
 
 import SwiftUI
+import LoopKitUI
 import LoopKit
 
 
@@ -31,10 +32,14 @@ struct PlayTestBeepsView: View {
     var body: some View {
         VStack {
             List {
-                Section {
-                    Text(self.displayString).fixedSize(horizontal: false, vertical: true)
+                Group {
+                    Section {
+                        Text(self.displayString).fixedSize(horizontal: false, vertical: true)
+                    }
                 }
+                .elaraRows()
             }
+            .elaraListBackground()
             VStack {
                 Button(action: {
                     Task { await playTestBeepsAndHandleError() }
