@@ -3781,22 +3781,6 @@
         }
       }
     },
-    "How many units do you put in each Pod (85 – 200)?" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wie viele Einheiten füllst du in jeden Pod (85 – 200)?"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hoeveel eenheden doe je in elke Pod (85 – 200)?"
-          }
-        }
-      }
-    },
     "Insulin" : {
       "localizations" : {
         "de" : {
@@ -79576,6 +79560,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Je gebruikte %1$@ E in %2$@ uur. Voor een volle 80 uur (incl. verlenging) is dat zo'n %3$@ E; met 20%% marge kom je op %4$@ E, maar een Pod moet met minimaal %5$@ E worden gevuld. Zo gooi je per Pod ongeveer %6$@ E minder weg."
+          }
+        }
+      }
+    },
+    "How many units do you put in each Pod (100 – 200)?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie viele Einheiten füllst du in jeden Pod (100 – 200)?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoeveel eenheden doe je in elke Pod (100 – 200)?"
           }
         }
       }

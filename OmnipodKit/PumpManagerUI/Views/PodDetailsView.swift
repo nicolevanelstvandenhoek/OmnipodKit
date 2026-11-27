@@ -311,12 +311,12 @@ struct PodDetailsView: View {
                 .keyboardType(.numberPad)
             Button(LocalizedString("Cancel", comment: "Cancel button title"), role: .cancel) {}
             Button(LocalizedString("Save", comment: "Save button title")) {
-                if let value = Double(fillInput), value >= 85, value <= 200 {
+                if let value = Double(fillInput), value >= Self.minimumFill, value <= 200 {
                     fillUnits = value
                 }
             }
         } message: {
-            Text(LocalizedString("How many units do you put in each Pod (85 – 200)?", comment: "Pod details: fill amount prompt"))
+            Text(LocalizedString("How many units do you put in each Pod (100 – 200)?", comment: "Pod details: fill amount prompt"))
         }
     }
 
