@@ -79545,6 +79545,40 @@
           }
         }
       }
+    },
+    "Fill next time %@ U, the minimum for a Pod." : {
+      "comment" : "Pod details advice when the use is below the minimum fill (1: units)",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Befülle künftig %@ IE, das Minimum für einen Pod."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vul voortaan %@ E, het minimum voor een Pod."
+          }
+        }
+      }
+    },
+    "You used %1$@ U in %2$@ hours. A full 80 hours (with the extension) needs about %3$@ U; with 20%% margin that is %4$@ U, but a Pod must be filled with at least %5$@ U. That is about %6$@ U less waste per Pod." : {
+      "comment" : "Pod details advice explanation below the minimum fill (1: used, 2: hours, 3: needed for 80 h, 4: with margin, 5: minimum fill, 6: saved)",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast %1$@ IE in %2$@ Stunden verwendet. Für volle 80 Stunden (mit Verlängerung) sind das etwa %3$@ IE; mit 20 %% Reserve %4$@ IE, aber ein Pod muss mit mindestens %5$@ IE befüllt werden. So verwirfst du pro Pod etwa %6$@ IE weniger."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je gebruikte %1$@ E in %2$@ uur. Voor een volle 80 uur (incl. verlenging) is dat zo'n %3$@ E; met 20%% marge kom je op %4$@ E, maar een Pod moet met minimaal %5$@ E worden gevuld. Zo gooi je per Pod ongeveer %6$@ E minder weg."
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

@@ -152,12 +152,19 @@ struct PodDetailsView: View {
         }
     }
 
-    /// Fill amount from the pod's use: enough for 80 hours (72 + the 8 hour extension) plus 20%,
-    /// rounded up to 5 U and never below the 85 U a pod needs to start. Nil without enough data.
-    private func advisedFill(used: Double) -> Double? {
+    /// The least insulin a pod should be filled with.
+    private static let minimumFill: Double = 100
+
+    /// Enough for 80 hours (72 + the 8 hour extension) plus 20%, rounded up to 5 U. Nil without enough data.
+    private func neededWithMargin(used: Double) -> Double? {
         guard podHours >= 12, used > 0 else { return nil }
         let needed = used / podHours * 80
-        return max(85, (needed * 1.2 / 5).rounded(.up) * 5)
+        return (needed * 1.2 / 5).rounded(.up) * 5
+    }
+
+    /// Fill amount from the pod's use, never below the minimum fill. Nil without enough data.
+    private func advisedFill(used: Double) -> Double? {
+        neededWithMargin(used: used).map { max(Self.minimumFill, $0) }
     }
 
     @ViewBuilder private var insulinCard: some View {
@@ -208,7 +215,18 @@ struct PodDetailsView: View {
                     HStack(alignment: .top, spacing: 9) {
                         Image(systemName: "lightbulb.fill")
                             .foregroundColor(.yellow)
-                        if advised < fillUnits - 5 {
+                        if advised < fillUnits - 5, let withMargin = neededWithMargin(used: used), withMargin < Self.minimumFill {
+                            (Text(String(format: LocalizedString("Fill next time %@ U, the minimum for a Pod.", comment: "Pod details advice when the use is below the minimum fill (1: units)"), String(Int(advised)))).bold()
+                                + Text(" " + String(
+                                    format: LocalizedString("You used %1$@ U in %2$@ hours. A full 80 hours (with the extension) needs about %3$@ U; with 20%% margin that is %4$@ U, but a Pod must be filled with at least %5$@ U. That is about %6$@ U less waste per Pod.", comment: "Pod details advice explanation below the minimum fill (1: used, 2: hours, 3: needed for 80 h, 4: with margin, 5: minimum fill, 6: saved)"),
+                                    String(Int(used.rounded())),
+                                    String(Int(podHours.rounded())),
+                                    String(Int((used / podHours * 80).rounded())),
+                                    String(Int(withMargin)),
+                                    String(Int(Self.minimumFill)),
+                                    String(Int((fillUnits - advised).rounded()))
+                                )))
+                        } else if advised < fillUnits - 5 {
                             (Text(String(format: LocalizedString("Fill next time about %@ U.", comment: "Pod details advice (1: units)"), String(Int(advised)))).bold()
                                 + Text(" " + String(
                                     format: LocalizedString("You used %1$@ U in %2$@ hours. A full 80 hours (with the extension) needs about %3$@ U; with 20%% margin that is %4$@ U, about %5$@ U less waste per Pod.", comment: "Pod details advice explanation (1: used, 2: hours, 3: needed for 80 h, 4: advised, 5: saved)"),
